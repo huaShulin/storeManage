@@ -1,0 +1,198 @@
+<%--
+  Created by IntelliJ IDEA.
+  User: Shulin
+  Date: 14/11/2017
+  Time: 下午 3:58
+  To change this template use File | Settings | File Templates.
+--%>
+<%@ page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8" language="java" %>
+
+<script type="text/javascript">
+
+    $(function () {
+        $("#userDatagrid").datagrid({
+            fit:true,
+            fitColumns:false,
+            pagination:true,
+            pageList:[2,3,5,10],
+            pageNumber:1,
+            pageSize:3,
+            url:'/user/queryAll',
+            columns:[[
+                {title:'用户名',field:'username',width:150,align:'center'},
+                {title:'真实姓名',field:'realname',width:100,align:'center'},
+                {title:'手机号',field:'phone',width:200,align:'center'},
+                {title:'头像',field:'src',width:100,align:'center',
+                    formatter:function(value){
+                        var src ="${pageContext.request.contextPath}/"+value;
+                        return  '<img src="'+src+'" style="height:30px">';
+                    }},
+                {title:'性别',field:'sex',width:70,align:'center'},
+                {title:'城市编号',field:'cityCode',width:100,align:'center'},
+                {title:'省份编号',field:'provinceCode',width:100,align:'center'},
+                {title:'状态',field:'status',width:100,align:'center'},
+                {title:'上师编号',field:'guruId',width:100,align:'center'},
+                {title:'操作',field:'options',width:200,align:'center'
+                    ,formatter:function (value,row,index) {
+                        return "<a class='option' data-options=\"plain:true,iconCls:'icon-photo'\" onclick=\"userInline('"+ row.src +"')\">预览</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"+
+                                "<a class='option' data-options=\"plain:true,iconCls:'icon-photo_edit'\" onclick=\"openUserEdit('"+ row.id +"')\">修改</a>"
+                    }
+                },
+                {title:'签名',field:'signature',width:250,align:'center'}
+            ]],
+            onLoadSuccess:function () {
+                $(".option").linkbutton();
+            },
+            //toolbar:'#userTools'
+        });
+    });
+
+    //add
+    function userSave() {
+        $('#userSaveForm').form('submit', {
+            url:'/user/save',
+            onSubmit: function(user){
+                //return $('#userSaveForm').form('validate');
+                return true;
+            },
+            success:function(data){
+                var data = eval('(' + data + ')');
+                if (data.success){
+                    $('#openUserSave').dialog('close',true);
+                    //var tab = $tabs.tabs('getSelected');
+                    //tab.panel('refresh');
+                    $("#userDatagrid").datagrid('reload');
+                } else {
+                    alert(data.message)
+                }
+            }
+        });
+    }
+    //Open User Save
+    function openUserSave() {
+        $("#openUserSave").dialog({
+            top:200,
+            width:680,
+            title:"保存轮播图",
+            iconCls:'icon-photo_edit',
+            href:'/back/user/saveUser.jsp',
+            buttons:[{
+                text:'保存',
+                iconCls:'icon-save',
+                handler:userSave
+            },{
+                text:'关闭',
+                iconCls:'icon-cancel',
+                handler:function () {
+                    $("#openUserSave").dialog('close',true);
+                }
+            }]
+        });
+    }
+
+    function userInline(src) {
+        window.open('/user/inline?src='+src);
+    }
+
+    //update
+    function userEdit() {
+        $('#userEditForm').form('submit', {
+            url:'/user/edit',
+            onSubmit: function(user){
+                return $('#userEditForm').form('validate');
+            },
+            success:function(data){
+                var data = eval('(' + data + ')');
+                if (data.success){
+                    //var tab = $tabs.tabs('getSelected');
+                    //tab.panel('refresh');
+                    $("#userDatagrid").datagrid('reload');
+                    $('#openUserEdit').dialog('close',true);
+                } else {
+                    alert(data.message)
+                }
+            }
+        });
+    }
+    //Open Update dialog
+    function openUserEdit(id) {
+        $("#openUserEdit").dialog({
+            top:200,
+            width:700,
+            title:"修改用户信息",
+            iconCls:'icon-man',
+            href:'/back/user/editUser.jsp?id='+id,
+            buttons:[{
+                text:'保存',
+                iconCls:'icon-save',
+                handler:userEdit
+            },{
+                text:'关闭',
+                iconCls:'icon-cancel',
+                handler:function () {
+                    $("#openUserEdit").dialog('close',true);
+                }
+            }]
+        });
+    }
+
+    //Open Inline dialog
+    //暂未成功
+    function openUserInline(id) {
+        $("#openUserEdit").dialog({
+            top:200,
+            width:700,
+            title:"修改用户信息",
+            iconCls:'icon-man',
+            href:'/user/inline?src='+src,
+            buttons:[{
+                text:'关闭',
+                iconCls:'icon-cancel',
+                handler:function () {
+                    $("#openUserEdit").dialog('close',true);
+                }
+            }]
+        });
+    }
+
+    //delete
+    function userDelete(id) {
+        console.log(id);
+        //友情提醒
+        $.messager.confirm('提示','确定要删除吗?',function(r){
+            if(r){
+                //发送ajax请求删除用户
+                $.post('/user/remove',{"id":id},function(){
+                    var tab = $tabs.tabs('getSelected');
+                    tab.panel('refresh');
+                    $.messager.show({
+                        title:'提示',
+                        msg:'言教或法要删除成功...',
+                    });
+                    //刷新datagrid
+                    $("#dg").datagrid('reload');//始终保持在当前页展示
+                });
+            }
+
+        });
+    }
+
+    
+</script>
+
+<%--datagrid--%>
+<table id="userDatagrid"></table>
+
+<%--工具栏--%>
+<div id="userTools">
+    <a class="easyui-linkbutton" onclick="openUserSave();" data-options="iconCls:'icon-photo_add',plain:true">添加</a>
+</div>
+
+<%--用户保存对话框--%>
+<div id="openUserSave"></div>
+
+<%--用户修改对话框--%>
+<div id="openUserEdit"></div>
+
+<%--用户头像预览对话框--%>
+<div id="openUserinline"></div>

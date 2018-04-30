@@ -1,0 +1,108 @@
+<%--
+  Created by IntelliJ IDEA.
+  User: Shulin
+  Date: 14/11/2017
+  Time: 上午 11:32
+  To change this template use File | Settings | File Templates.
+--%>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@include file="util.jsp" %>
+<html>
+<head>
+    <title>Title</title>
+    <link rel="stylesheet" href="/static/back/kindeditor/themes/default/default.css" />
+    <link rel="stylesheet" href="/static/back/kindeditor/plugins/code/prettify.css" />
+    <link rel="stylesheet" type="text/css" href="/static/back/easyui/themes/black/easyui.css">
+    <link rel="stylesheet" type="text/css" href="/static/back/easyui/themes/icon.css">
+    <link rel="stylesheet" type="text/css" href="/static/back/easyui/themes/IconExtension.css">
+    <script type="text/javascript" src="/static/back/easyui/js/jquery.min.js"></script>
+    <script type="text/javascript" src="/static/back/easyui/js/jquery.easyui.min.js"></script>
+    <script charset="utf-8" src="/static/back/kindeditor/kindeditor-all-min.js"></script>
+    <script charset="utf-8" src="/static/back/kindeditor/zh-CN.js"></script>
+    <script charset="utf-8" src="/static/back/kindeditor/plugins/code/prettify.js"></script>
+    <script src="/static/back/echarts/echarts.min.js"></script>
+    <script type="text/javascript">
+        var $accordion,$tabs;
+
+        $(function () {
+            $accordion = $("#accordion");
+            $tabs = $("#tabs");
+
+            //查询数据库菜单，得到json，渲染到页面
+            $.get("/back/main/menu.json",function (result) {
+                //遍历一级菜单
+                $.each(result,function (idx,menu) {
+                    //accordion内容
+                    console.log(menu);
+                    var content = "<div style='text-align: center;'>";
+                    //遍历二级菜单
+                    $.each(menu.children,function (idx,child) {
+                        var con = child.name + "#" + child.iconCls + "#" + child.href;
+                        content += "<div onclick=\"addTabs('"+ con +"')\" style='width: 90%;margin:5px 0px 5px 0px; border:1px #95B8E7 solid;' class='easyui-linkbutton' data-options=\"plain:true,iconCls:'"+child.iconCls+"'\">"+child.name+"</div><br/>";
+                    });
+                    content += "</div>";
+                    //内容追加
+                    $accordion.accordion('add',{
+                        title:menu.name,
+                        iconCls:menu.iconCls,
+                        content:content,
+                    });
+                });
+
+            },"JSON");
+        });
+
+        //菜单追加方法
+        function addTabs(content) {
+            var con = content.split("#");
+            //标题
+            var title = con[0];
+            //图标
+            var iconCls = con[1];
+            //所查询页面
+            var href = con[2];
+            //向center中添加tabs
+            if (!$tabs.tabs('exists',title)) {
+                $tabs.tabs('add',{
+                    title:title,
+                    iconCls:iconCls,
+                    closable:true,
+                    href:href,
+                    tools:[{
+                        //刷新按钮
+                        iconCls:'icon-reload',
+                        handler:function () {
+                            var tab = $tabs.tabs('getSelected');
+                            tab.panel('refresh');
+                        }
+                    }]
+
+                });
+            }else{
+                $tabs.tabs('select',title);
+            }
+
+        }
+
+    </script>
+</head>
+<body class="easyui-layout">
+    <%--head--%>
+    <div data-options="region:'north',split:false,href:'/back/main/head.jsp'" style="height:120px;"></div>
+    <%--foot--%>
+    <div data-options="region:'south',split:false,href:'/back/main/foot.jsp'" style="height:100px;"></div>
+    <%--left--%>
+    <div data-options="region:'west',title:'分类管理',split:false" style="width:120px;">
+        <div id="accordion" class="easyui-accordion" data-options="fit:true">
+
+        </div>
+    </div>
+    <%--center--%>
+    <div data-options="region:'center'">
+        <div id="tabs" class="easyui-tabs" data-options="fit:true">
+        </div>
+
+
+    </div>
+</body>
+</html>
