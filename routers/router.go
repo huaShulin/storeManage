@@ -1,7 +1,7 @@
 package routers
 
 import (
-	"huayilin/controllers"
+	"storeManage/controllers"
 	"github.com/astaxie/beego"
 )
 
