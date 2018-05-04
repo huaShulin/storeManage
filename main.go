@@ -1,7 +1,7 @@
 package main
 
 import (
-	_ "huayilin/routers"
+	_ "storeManage/routers"
 	"github.com/astaxie/beego"
 )
 
