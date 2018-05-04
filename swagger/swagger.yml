@@ -1,0 +1,12 @@
+swagger: "2.0"
+info: {}
+basePath: /hyl
+paths:
+  /login/GetHelloWorld:
+    get:
+      tags:
+      - login
+  /login/Login:
+    post:
+      tags:
+      - login
