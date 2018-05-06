@@ -29,14 +29,17 @@
             $tabs = $("#tabs");
 
             //查询数据库菜单，得到json，渲染到页面
-            $.get("/back/main/menu.json",function (result) {
+            $.get("/hyl/menu",function (result) {
                 //遍历一级菜单
-                $.each(result,function (idx,menu) {
+                $.each(result.menus,function (idx,menu) {
                     //accordion内容
-                    console.log(menu);
+                    console.log(menu.children);
+                    console.log(menu.name);
                     var content = "<div style='text-align: center;'>";
+                    console.log(menu.name);
                     //遍历二级菜单
                     $.each(menu.children,function (idx,child) {
+                        console.log(1);
                         var con = child.name + "#" + child.iconCls + "#" + child.href;
                         content += "<div onclick=\"addTabs('"+ con +"')\" style='width: 90%;margin:5px 0px 5px 0px; border:1px #95B8E7 solid;' class='easyui-linkbutton' data-options=\"plain:true,iconCls:'"+child.iconCls+"'\">"+child.name+"</div><br/>";
                     });
@@ -88,9 +91,9 @@
 </head>
 <body class="easyui-layout">
     <%--head--%>
-    <div data-options="region:'north',split:false,href:'/back/main/head.jsp'" style="height:120px;"></div>
+    <div data-options="region:'north',split:false,href:'/static/back/main/head.html'" style="height:120px;"></div>
     <%--foot--%>
-    <div data-options="region:'south',split:false,href:'/back/main/foot.jsp'" style="height:100px;"></div>
+    <div data-options="region:'south',split:false,href:'/static/back/main/foot.html'" style="height:100px;"></div>
     <%--left--%>
     <div data-options="region:'west',title:'分类管理',split:false" style="width:120px;">
         <div id="accordion" class="easyui-accordion" data-options="fit:true">

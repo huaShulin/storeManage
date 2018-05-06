@@ -17,9 +17,17 @@ func init() {
 
 	beego.GlobalControllerRouter["storeManage/controllers:LoginController"] = append(beego.GlobalControllerRouter["storeManage/controllers:LoginController"],
 		beego.ControllerComments{
-			Method: "UserLoginVerification",
+			Method: "Login",
 			Router: `/Login`,
 			AllowHTTPMethods: []string{"POST"},
+			MethodParams: param.Make(),
+			Params: nil})
+
+	beego.GlobalControllerRouter["storeManage/controllers:MenuController"] = append(beego.GlobalControllerRouter["storeManage/controllers:MenuController"],
+		beego.ControllerComments{
+			Method: "GetMenu",
+			Router: `/`,
+			AllowHTTPMethods: []string{"GET"},
 			MethodParams: param.Make(),
 			Params: nil})
 

@@ -25,9 +25,8 @@
                     },
                     success:function(data){
                         var data = eval('(' + data + ')');
-                        alert("1");
                         if (data.success){
-                            location.href='/back/main/main.jsp';
+                            location.href='/static/back/main/main.html';
                         } else {
                             alert(data.message)
                         }

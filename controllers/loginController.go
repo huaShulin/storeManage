@@ -4,6 +4,7 @@ import (
 	"github.com/astaxie/beego"
 	"fmt"
 	"storeManage/models"
+	"storeManage/services"
 )
 
 type LoginController struct {
@@ -26,13 +27,12 @@ func (l *LoginController) GetHelloWorld() {
 // @Success 200 {object} models.Result "返回结果"
 // @Failure 400 {object} models.Result "返回结果"
 // @router /Login [POST]
-func (l *LoginController) UserLoginVerification() {
+func (l *LoginController) Login() {
 	var reply models.Result
 
-	fmt.Println("UserLoginVerification")
+	fmt.Println("Login")
 	login := models.Login{}
 	if err := l.ParseForm(&login); err != nil {
-		//l.Ctx.WriteString("输入参数不合法")
 		l.Ctx.Output.Status = 200
 		reply.Success = false
 		reply.Message = "输入参数不合法"
@@ -40,28 +40,16 @@ func (l *LoginController) UserLoginVerification() {
 		l.ServeJSON()
 		return
 	}
-	if login.Username != "shulin" {
-		//l.Ctx.WriteString("用户不存在")
-		l.Ctx.Output.Status = 200
-		reply.Success = false
-		reply.Message = "用户不存在"
-		l.Data["json"] = reply
-		l.ServeJSON()
-		return
+
+	var id string
+	reply, id = services.Login(login)
+
+	if reply.Success {
+		l.SetSession("id", id)
+		fmt.Println(l.GetSession("id"))
 	}
-	if login.Password != "123123" {
-		//l.Ctx.WriteString("密码错误")
-		l.Ctx.Output.Status = 200
-		reply.Success = false
-		reply.Message = "密码错误"
-		l.Data["json"] = reply
-		l.ServeJSON()
-		return
-	}
-	//l.Ctx.WriteString("登陆成功")
 
 	l.Ctx.Output.Status = 200
-
 	l.Data["json"] = reply
 	l.ServeJSON()
 
