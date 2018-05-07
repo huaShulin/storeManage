@@ -4,7 +4,6 @@ import (
 	"github.com/astaxie/beego"
 	"storeManage/models"
 	"storeManage/services"
-	"fmt"
 )
 
 type GoodsController struct {
@@ -13,19 +12,13 @@ type GoodsController struct {
 
 // @Title Goods
 // @Description 获取商品
-// @Success 200 {object} models.GoodsResult "返回结果"
-// @Failure 400 {object} models.GoodsResult "返回结果"
-// @router / [GET]
+// @Success 200 {object} []models.Goods "返回结果"
+// @Failure 400 {object} []models.Goods "返回结果"
+// @router /queryAll [POST]
 func (m *MenuController) GetGoods() {
-	var reply models.MenuResult
+	var reply []models.Goods
 
-	userId := m.GetSession("id")
-	fmt.Print("获取菜单",userId)
-
-	s := userId.(string)
-	fmt.Print("获取菜单",s)
-
-	reply = services.Menu(s)
+	reply = services.GetGoods()
 	m.Ctx.Output.Status = 200
 	m.Data["json"] = reply
 	m.ServeJSON()
