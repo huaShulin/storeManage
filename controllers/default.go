@@ -13,4 +13,5 @@ func (c *MainController) Get() {
 	c.Data["Email"] = "astaxie@gmail.com"
 	c.TplName = "index.tpl"
 	//c.TplName = "/static/back/manager/managerLogin.html"
+	c.Redirect("/static/back/manager/managerLogin.html",301)
 }

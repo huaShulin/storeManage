@@ -9,6 +9,14 @@ func init() {
 
 	beego.GlobalControllerRouter["storeManage/controllers:GoodsController"] = append(beego.GlobalControllerRouter["storeManage/controllers:GoodsController"],
 		beego.ControllerComments{
+			Method: "GetEditGoods",
+			Router: `/getEditGoods`,
+			AllowHTTPMethods: []string{"GET"},
+			MethodParams: param.Make(),
+			Params: nil})
+
+	beego.GlobalControllerRouter["storeManage/controllers:GoodsController"] = append(beego.GlobalControllerRouter["storeManage/controllers:GoodsController"],
+		beego.ControllerComments{
 			Method: "GetGoods",
 			Router: `/queryAll`,
 			AllowHTTPMethods: []string{"POST"},
@@ -20,14 +28,6 @@ func init() {
 			Method: "SaveEditId",
 			Router: `/saveEditId`,
 			AllowHTTPMethods: []string{"POST"},
-			MethodParams: param.Make(),
-			Params: nil})
-
-	beego.GlobalControllerRouter["storeManage/controllers:GoodsController"] = append(beego.GlobalControllerRouter["storeManage/controllers:GoodsController"],
-		beego.ControllerComments{
-			Method: "GetEditGoods",
-			Router: `/getEditGoods`,
-			AllowHTTPMethods: []string{"GET"},
 			MethodParams: param.Make(),
 			Params: nil})
 
@@ -50,6 +50,14 @@ func init() {
 	beego.GlobalControllerRouter["storeManage/controllers:MenuController"] = append(beego.GlobalControllerRouter["storeManage/controllers:MenuController"],
 		beego.ControllerComments{
 			Method: "GetMenu",
+			Router: `/`,
+			AllowHTTPMethods: []string{"GET"},
+			MethodParams: param.Make(),
+			Params: nil})
+
+	beego.GlobalControllerRouter["storeManage/controllers:TypeController"] = append(beego.GlobalControllerRouter["storeManage/controllers:TypeController"],
+		beego.ControllerComments{
+			Method: "GetType",
 			Router: `/`,
 			AllowHTTPMethods: []string{"GET"},
 			MethodParams: param.Make(),
