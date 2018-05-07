@@ -7,6 +7,30 @@ import (
 
 func init() {
 
+	beego.GlobalControllerRouter["storeManage/controllers:GoodsController"] = append(beego.GlobalControllerRouter["storeManage/controllers:GoodsController"],
+		beego.ControllerComments{
+			Method: "GetGoods",
+			Router: `/queryAll`,
+			AllowHTTPMethods: []string{"POST"},
+			MethodParams: param.Make(),
+			Params: nil})
+
+	beego.GlobalControllerRouter["storeManage/controllers:GoodsController"] = append(beego.GlobalControllerRouter["storeManage/controllers:GoodsController"],
+		beego.ControllerComments{
+			Method: "SaveEditId",
+			Router: `/saveEditId`,
+			AllowHTTPMethods: []string{"POST"},
+			MethodParams: param.Make(),
+			Params: nil})
+
+	beego.GlobalControllerRouter["storeManage/controllers:GoodsController"] = append(beego.GlobalControllerRouter["storeManage/controllers:GoodsController"],
+		beego.ControllerComments{
+			Method: "GetEditGoods",
+			Router: `/getEditGoods`,
+			AllowHTTPMethods: []string{"GET"},
+			MethodParams: param.Make(),
+			Params: nil})
+
 	beego.GlobalControllerRouter["storeManage/controllers:LoginController"] = append(beego.GlobalControllerRouter["storeManage/controllers:LoginController"],
 		beego.ControllerComments{
 			Method: "GetHelloWorld",
@@ -25,23 +49,7 @@ func init() {
 
 	beego.GlobalControllerRouter["storeManage/controllers:MenuController"] = append(beego.GlobalControllerRouter["storeManage/controllers:MenuController"],
 		beego.ControllerComments{
-			Method: "GetGoods",
-			Router: `/queryAll`,
-			AllowHTTPMethods: []string{"POST"},
-			MethodParams: param.Make(),
-			Params: nil})
-
-	beego.GlobalControllerRouter["storeManage/controllers:MenuController"] = append(beego.GlobalControllerRouter["storeManage/controllers:MenuController"],
-		beego.ControllerComments{
 			Method: "GetMenu",
-			Router: `/`,
-			AllowHTTPMethods: []string{"GET"},
-			MethodParams: param.Make(),
-			Params: nil})
-
-	beego.GlobalControllerRouter["storeManage/controllers:MenuController"] = append(beego.GlobalControllerRouter["storeManage/controllers:MenuController"],
-		beego.ControllerComments{
-			Method: "GetGoods",
 			Router: `/`,
 			AllowHTTPMethods: []string{"GET"},
 			MethodParams: param.Make(),

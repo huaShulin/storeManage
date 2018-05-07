@@ -33,13 +33,13 @@
                 //遍历一级菜单
                 $.each(result.menus,function (idx,menu) {
                     //accordion内容
-                    console.log(menu.children);
-                    console.log(menu.name);
+                    //console.log(menu.children);
+                    //console.log(menu.name);
                     var content = "<div style='text-align: center;'>";
-                    console.log(menu.name);
+                    //console.log(menu.name);
                     //遍历二级菜单
                     $.each(menu.children,function (idx,child) {
-                        console.log(1);
+                        //console.log(1);
                         var con = child.name + "#" + child.iconCls + "#" + child.href;
                         content += "<div onclick=\"addTabs('"+ con +"')\" style='width: 90%;margin:5px 0px 5px 0px; border:1px #95B8E7 solid;' class='easyui-linkbutton' data-options=\"plain:true,iconCls:'"+child.iconCls+"'\">"+child.name+"</div><br/>";
                     });

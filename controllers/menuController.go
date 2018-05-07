@@ -20,7 +20,6 @@ func (m *MenuController) GetMenu() {
 	var reply models.MenuResult
 
 	userId := m.GetSession("id")
-	fmt.Print("获取菜单",userId)
 
 	s := userId.(string)
 	fmt.Print("获取菜单",s)

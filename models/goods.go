@@ -15,3 +15,7 @@ type Goods struct {
 	Purchase	int			`json:"purchase"`
 	Type		string		`json:"type"`
 }
+
+type SaveEditId struct {
+	Id	string `json:"id"`
+}

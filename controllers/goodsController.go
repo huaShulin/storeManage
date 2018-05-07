@@ -4,6 +4,7 @@ import (
 	"github.com/astaxie/beego"
 	"storeManage/models"
 	"storeManage/services"
+	"fmt"
 )
 
 type GoodsController struct {
@@ -15,11 +16,50 @@ type GoodsController struct {
 // @Success 200 {object} []models.Goods "返回结果"
 // @Failure 400 {object} []models.Goods "返回结果"
 // @router /queryAll [POST]
-func (m *MenuController) GetGoods() {
+func (g *GoodsController) GetGoods() {
 	var reply []models.Goods
 
-	reply = services.GetGoods()
-	m.Ctx.Output.Status = 200
-	m.Data["json"] = reply
-	m.ServeJSON()
+	reply = services.GetGoodss()
+	g.Ctx.Output.Status = 200
+	g.Data["json"] = reply
+	g.ServeJSON()
+}
+
+// @Title SaveEditId
+// @Description 获取修改商品ID
+// @Param body body models.SaveEditId true "修改商品ID"
+// @Success 200 {object} []models.Result "返回结果"
+// @Failure 400 {object} []models.Result "返回结果"
+// @router /saveEditId [POST]
+func (g *GoodsController) SaveEditId() {
+	var reply models.Result
+
+	in := models.SaveEditId{}
+	g.ParseForm(&in)
+	fmt.Println("SaveEditId:",in.Id)
+	g.SetSession("goodsEditId", in.Id)
+
+	g.Ctx.Output.Status = 200
+	reply.Success = true
+	reply.Message = "目标商品存储成功:ID=" + in.Id
+	g.Data["json"] = reply
+	g.ServeJSON()
+}
+
+// @Title GetEditGoods
+// @Description 获取修改商品
+// @Success 200 {object} []models.Result "返回结果"
+// @Failure 400 {object} []models.Result "返回结果"
+// @router /getEditGoods [GET]
+func (g *GoodsController) GetEditGoods() {
+	var reply models.Goods
+
+	goodsId := g.GetSession("goodsEditId")
+	fmt.Print("goodsId:", goodsId)
+
+	reply = services.GetGoods(goodsId.(string))
+
+	g.Ctx.Output.Status = 200
+	g.Data["json"] = reply
+	g.ServeJSON()
 }

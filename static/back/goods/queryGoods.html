@@ -23,8 +23,8 @@
                 {title:'类别',field:'type',width:100,align:'center'},
                 {title:'操作',field:'options',width:200,align:'center'
                     ,formatter:function (value,row,index) {
-                        return "<a class='option' data-options=\"plain:true,iconCls:'icon-photo'\" onclick=\"userInline('"+ row.src +"')\">预览</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"+
-                                "<a class='option' data-options=\"plain:true,iconCls:'icon-photo_edit'\" onclick=\"openUserEdit('"+ row.id +"')\">修改</a>"
+                        return "<a class='option' data-options=\"plain:true,iconCls:'icon-photo'\" onclick=\"goodsInline('"+ row.src +"')\">预览</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"+
+                                "<a class='option' data-options=\"plain:true,iconCls:'icon-photo_edit'\" onclick=\"openGoodsEdit('"+ row.id +"')\">修改</a>"
                     }
                 }
             ]],
@@ -104,12 +104,15 @@
     }
     //Open Update dialog
     function openGoodsEdit(id) {
+        $.post('/hyl/goods/saveEditId', {"Id":id}, function(data){
+            alert(data.message);
+        }, 'json');
         $("#openGoodsEdit").dialog({
             top:200,
             width:700,
             title:"修改用户信息",
             iconCls:'icon-man',
-            href:'/back/user/editGoods.html?id='+id,
+            href:'/static/back/goods/editGoods.html',
             buttons:[{
                 text:'保存',
                 iconCls:'icon-save',
@@ -168,7 +171,7 @@
     
 </script>
 
-<%--datagrid--%>
+<!--datagrid-->
 <table id="goodsDatagrid"></table>
 
 <%--工具栏--%>
