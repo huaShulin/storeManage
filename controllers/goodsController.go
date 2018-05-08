@@ -14,8 +14,8 @@ type GoodsController struct {
 // @Title Goods
 // @Description 获取商品
 // @Param body body Page true "分页"
-// @Success 200 {object} []models.Goods "返回结果"
-// @Failure 400 {object} []models.Goods "返回结果"
+// @Success 200 {object} models.GoodsResult "返回结果"
+// @Failure 400 {object} models.GoodsResult "返回结果"
 // @router /queryAll [POST]
 func (g *GoodsController) GetGoods() {
 	//var reply []models.Goods
@@ -27,8 +27,7 @@ func (g *GoodsController) GetGoods() {
 	fmt.Println("PAGE:", in.Page)
 	fmt.Println("SIZE:", in.Rows)
 
-	reply.Goods = services.GetGoodss(in)
-	reply.Total = 10
+	reply = services.GetGoodss(in)
 	g.Ctx.Output.Status = 200
 	g.Data["json"] = reply
 	g.ServeJSON()

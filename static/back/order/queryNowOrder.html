@@ -1,14 +1,14 @@
 <script type="text/javascript">
 
     $(function () {
-        $("#goodsDatagrid").datagrid({
+        $("#orderGoodsDatagrid").datagrid({
             fit:true,
             fitColumns:false,
             pagination:true,
             pageList:[2,3,5,10],
             pageNumber:1,
             pageSize:3,
-            url:'/hyl/goods/queryAll',
+            url:'/hyl/order/nowOrder',
             columns:[[
                 {title:'商品名',field:'name',width:150,align:'center'},
                 {title:'价格',field:'price',width:100,align:'center'},
@@ -17,15 +17,12 @@
                         var src ="/static/"+value;
                         return  '<img src="'+src+'" style="height:30px">';
                     }},
-                {title:'描述',field:'remark',width:70,align:'center'},
-                {title:'剩余数量',field:'number',width:70,align:'center'},
-                {title:'提示进货数量',field:'purchase',width:70,align:'center'},
+                {title:'订单数量',field:'orderNumber',width:70,align:'center'},
+                {title:'库存总量',field:'number',width:70,align:'center'},
                 {title:'类别',field:'type',width:100,align:'center'},
                 {title:'操作',field:'options',width:200,align:'center'
                     ,formatter:function (value,row,index) {
                         return "<a class='option' data-options=\"plain:true,iconCls:'icon-photo'\" onclick=\"goodsInline('"+ row.src +"')\">预览</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"+
-                                "<a class='option' data-options=\"plain:true,iconCls:'icon-photo_edit'\" onclick=\"goodsJoin('"+ row.id +"')\">加入订单</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"+
-                                "<a class='option' data-options=\"plain:true,iconCls:'icon-photo_edit'\" onclick=\"openGoodsEdit('"+ row.id +"')\">修改</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"+
                                 "<a class='option' data-options=\"plain:true,iconCls:'icon-photo_edit'\" onclick=\"goodsDelete('"+ row.id +"')\">删除</a>"
                     }
                 }
@@ -196,7 +193,7 @@
 </script>
 
 <!--datagrid-->
-<table id="goodsDatagrid"></table>
+<table id="orderGoodsDatagrid"></table>
 
 <%--工具栏--%>
 <div id="goodsTools">

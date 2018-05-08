@@ -7,14 +7,16 @@ import (
 	"github.com/jinzhu/gorm"
 )
 
-func GetGoodss(info models.PageInfo) ([]models.Goods) {
+func GetGoodss(info models.PageInfo) (models.GoodsResult) {
 
-	var result []models.Goods
+	var result models.GoodsResult
 
 	db, _ := mysql.GetConn()
 
 	goodss := make([]modelDB.Goods, 0)
-	err := db.Raw(modelDB.GET_GOODS_LIST).Scan(&goodss).Error
+
+	sql := modelDB.GET_GOODS_LIST + PageSql(info)
+	err := db.Raw(sql).Scan(&goodss).Error
 	if err != nil && err != gorm.ErrRecordNotFound {
 		//result.Success = false
 		//result.Message = "数据库异常"
@@ -34,9 +36,13 @@ func GetGoodss(info models.PageInfo) ([]models.Goods) {
 		temp.Src = goods.Src
 		temp.Remark = goods.Remark
 		temp.Number = goods.Number
+		temp.Purchase = temp.Purchase
 		temp.Type = goods.Type
-		result = append(result, temp)
+		result.Goods = append(result.Goods, temp)
 	}
+
+	db.Table("TB_GOODS").Count(&result.Total)
+
 	return result
 }
 
@@ -80,6 +86,7 @@ func EditGoods(id string, goodsInfo map[string]interface{}) models.Result{
 	if err != nil {
 		result.Success = false
 		result.Message = "修改失败"
+		return result
 	}
 
 	result.Success = true
@@ -104,6 +111,7 @@ func SaveGoods(info models.GoodsParam) models.Result{
 	if err != nil {
 		result.Success = false
 		result.Message = "保存失败"
+		return result
 	}
 
 	result.Success = true
@@ -119,9 +127,34 @@ func DeleteGoods(id string) models.Result{
 	if err != nil {
 		result.Success = false
 		result.Message = "删除失败"
+		return result
 	}
 
 	result.Success = true
 	result.Message = "删除成功"
+	return result
+}
+
+//检查商品数量
+func CheckGoodsNumber(goodsId string, number int) models.Result {
+	var result models.Result
+
+	db, _ := mysql.GetConn()
+
+	var num modelDB.Result
+	err := db.Raw(" SELECT NUMBER FROM TB_GOODS WHERE ID = ? ", goodsId).Scan(&num).Error
+	if err != nil {
+		result.Success = false
+		result.Message = "数据库异常"
+		return result
+	}
+	if number > num.Number {
+		result.Success = false
+		result.Message = "数量不足，添加失败"
+		return result
+	}
+
+	result.Success = true
+	result.Message = "数量充足"
 	return result
 }

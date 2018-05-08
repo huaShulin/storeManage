@@ -1,6 +1,6 @@
 <html>
 <head>
-    <title>小型店铺管理系统</title>
+    <title>Title</title>
     <link rel="stylesheet" type="text/css" href="/static/back/easyui/themes/default/easyui.css">
     <link rel="stylesheet" type="text/css" href="/static/back/easyui/themes/icon.css">
     <script type="text/javascript" src="/static/back/easyui/js/jquery.min.js"></script>
@@ -10,9 +10,9 @@
         $(function () {
             $('#dd').dialog({
                 top: 50,
-                title: '小型店铺管理系统--登录',
+                title: '管理员登录',
                 width: 280,
-                height: 142,
+                height: 332,
                 closed: false
             });
 
@@ -70,9 +70,6 @@
         <form id="form" action="/EasyUI_day2_UserRegister/user/login" method="post">
             <table>
                 <tr>
-                    <td></td><td></td>
-                </tr>
-                <tr>
                     <td>用户名：</td>
                     <td>
                         <input name="Username"
@@ -97,7 +94,6 @@
                                style="width:150px">
                     </td>
                 </tr>
-                <!--
                 <tr>
                     <td>验证码：</td>
                     <td>
@@ -105,7 +101,6 @@
                         <img id="num" src="/manager/getImage" style="width: auto;height: 20px"/>
                     </td>
                 </tr>
-                -->
                 <tr>
                     <td></td>
                     <td style="text-align:right">
