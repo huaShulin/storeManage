@@ -7,7 +7,7 @@ import (
 	"github.com/jinzhu/gorm"
 )
 
-func GetGoodss() ([]models.Goods) {
+func GetGoodss(info models.PageInfo) ([]models.Goods) {
 
 	var result []models.Goods
 
@@ -67,6 +67,61 @@ func GetGoods(id string) (models.Goods) {
 	result.Src = goods.Src
 	result.Remark = goods.Remark
 	result.Number = goods.Number
+	result.Purchase = goods.Purchase
 	result.Type = goods.Type
+	return result
+}
+
+func EditGoods(id string, goodsInfo map[string]interface{}) models.Result{
+	var result models.Result
+
+	db, _ := mysql.GetConn()
+	err := db.Table("TB_GOODS").Where(" ID = ? ", id).Update(goodsInfo).Error
+	if err != nil {
+		result.Success = false
+		result.Message = "修改失败"
+	}
+
+	result.Success = true
+	result.Message = "修改成功"
+	return result
+}
+
+func SaveGoods(info models.GoodsParam) models.Result{
+	var result models.Result
+
+	var goods modelDB.SaveGoods
+	goods.Id = mysql.GetId()
+	goods.Name = info.Name
+	goods.Price = info.Price
+	goods.Number = info.Number
+	goods.Purchase = info.Purchase
+	goods.Remark = info.Remark
+	goods.TypeId = info.TypeId
+
+	db, _ := mysql.GetConn()
+	err := db.Table("TB_GOODS").Save(&goods).Error
+	if err != nil {
+		result.Success = false
+		result.Message = "保存失败"
+	}
+
+	result.Success = true
+	result.Message = "保存成功"
+	return result
+}
+
+func DeleteGoods(id string) models.Result{
+	var result models.Result
+
+	db, _ := mysql.GetConn()
+	err := db.Table("TB_GOODS").Where(" ID = ? ", id).Delete(&result).Error
+	if err != nil {
+		result.Success = false
+		result.Message = "删除失败"
+	}
+
+	result.Success = true
+	result.Message = "删除成功"
 	return result
 }

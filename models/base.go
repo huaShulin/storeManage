@@ -5,6 +5,10 @@ type Result struct {
 	Message string		`json:"message"`
 }
 
+type IdParam struct {
+	Id	string `form:"id"`
+}
+
 type PageInfo struct {
 	Page int `form:"page"`
 	Rows int `form:"rows"`

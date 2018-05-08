@@ -1,29 +1,27 @@
 
 <script>
     $(function(){
-        $("#userEditForm").form('load','/hyl/goods/getEditGoods');
+        $("#goodsEditForm").form('load','/hyl/goods/getEditGoods');
     });
 
 </script>
 <div style="text-align: center;">
-    <form id="userEditForm" method="post">
-        <input class="easyui-textbox" name="id" type="hidden">
-        <input class="easyui-textbox" name="realname" type="hidden">
-        <input class="easyui-textbox" name="phone" type="hidden">
-        <input class="easyui-textbox" name="password" type="hidden">
-        <input class="easyui-textbox" name="salt" type="hidden">
-        <input class="easyui-textbox" name="src" type="hidden">
-        <input class="easyui-textbox" name="sex" type="hidden">
-        <input class="easyui-textbox" name="cityCode" type="hidden">
-        <input class="easyui-textbox" name="provinceCode" type="hidden">
-        <input class="easyui-textbox" name="signature" type="hidden">
-        <div>
-            用户名
-            <input name="name" class="easyui-textbox" data-options="required:true" readonly/>
+    <form id="goodsEditForm" method="post">
+        <div style="margin-top: 1%">
+            商&nbsp;品&nbsp;名
+            <input name="name" class="easyui-textbox" data-options="required:true"/>
         </div>
-        <div>
-            价格
-            <input name="price" class="easyui-textbox" data-options="required:true" readonly/>
+        <div style="margin-top: 1%;">
+            价&nbsp;&nbsp;&nbsp;&nbsp;格
+            <input name="price" class="easyui-textbox" data-options="required:true"/>
+        </div>
+        <div style="margin-top: 1%;">
+            数&nbsp;&nbsp;&nbsp;&nbsp;量
+            <input name="number" class="easyui-textbox" data-options="required:true"/>
+        </div>
+        <div style="margin-top: 1%;">
+            提示数量
+            <input name="purchase" class="easyui-textbox" data-options="required:true"/>
         </div>
         <div style="margin-top: 1%">
             分类
@@ -41,7 +39,12 @@
 			        ">
         </div>
         <div style="margin-top: 1%;">
-            状态:<input class="easyui-textbox" name="status" data-options="required:true"><br/>
+            描述
+            <input class="easyui-textbox" name="remark" data-options="required:true"><br/>
+        </div>
+        <div style="margin-top: 1%">
+            选择图片
+            <input class="easyui-filebox" name="multipartFile" style="width: 23%">
         </div>
     </form>
 </div>

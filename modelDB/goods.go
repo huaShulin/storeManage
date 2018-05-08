@@ -14,3 +14,14 @@ type Goods struct {
 	Purchase	int			`gorm:"column:PURCHASE" json:"PURCHASE"`
 	Type		string		`gorm:"column:TYPE" json:"TYPE"`
 }
+
+type SaveGoods struct {
+	Id 			string		`gorm:"column:ID" json:"ID"`
+	Name 		string		`gorm:"column:NAME" json:"NAME"`
+	Price 		float64		`gorm:"column:PRICE" json:"PRICE"`
+	Src			string		`gorm:"column:SRC" json:"SRC"`
+	Remark 		string		`gorm:"column:REMARK" json:"REMARK"`
+	Number		int			`gorm:"column:NUMBER" json:"NUMBER"`
+	Purchase	int			`gorm:"column:PURCHASE" json:"PURCHASE"`
+	TypeId		string		`gorm:"column:TYPE_ID" json:"TYPE_ID"`
+}

@@ -24,14 +24,15 @@
                 {title:'操作',field:'options',width:200,align:'center'
                     ,formatter:function (value,row,index) {
                         return "<a class='option' data-options=\"plain:true,iconCls:'icon-photo'\" onclick=\"goodsInline('"+ row.src +"')\">预览</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"+
-                                "<a class='option' data-options=\"plain:true,iconCls:'icon-photo_edit'\" onclick=\"openGoodsEdit('"+ row.id +"')\">修改</a>"
+                                "<a class='option' data-options=\"plain:true,iconCls:'icon-photo_edit'\" onclick=\"openGoodsEdit('"+ row.id +"')\">修改</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"+
+                                "<a class='option' data-options=\"plain:true,iconCls:'icon-photo_edit'\" onclick=\"goodsDelete('"+ row.id +"')\">删除</a>"
                     }
                 }
             ]],
             onLoadSuccess:function () {
                 $(".option").linkbutton();
             },
-            //toolbar:'#userTools'
+            toolbar:'#goodsTools'
         });
     });
 
@@ -104,13 +105,13 @@
     }
     //Open Update dialog
     function openGoodsEdit(id) {
-        $.post('/hyl/goods/saveEditId', {"Id":id}, function(data){
+        $.post('/hyl/goods/saveEditId', {"id":id}, function(data){
             alert(data.message);
         }, 'json');
         $("#openGoodsEdit").dialog({
             top:200,
             width:700,
-            title:"修改用户信息",
+            title:"修改商品信息",
             iconCls:'icon-man',
             href:'/static/back/goods/editGoods.html',
             buttons:[{
@@ -133,7 +134,7 @@
         $("#openUserEdit").dialog({
             top:200,
             width:700,
-            title:"修改用户信息",
+            title:"修改商品信息",
             iconCls:'icon-man',
             href:'/user/inline?src='+src,
             buttons:[{
@@ -152,7 +153,7 @@
         //友情提醒
         $.messager.confirm('提示','确定要删除吗?',function(r){
             if(r){
-                //发送ajax请求删除用户
+                //发送ajax请求删除商品
                 $.post('/hyl/goods/remove',{"id":id},function(){
                     var tab = $tabs.tabs('getSelected');
                     tab.panel('refresh');
@@ -176,7 +177,7 @@
 
 <%--工具栏--%>
 <div id="goodsTools">
-    <a class="easyui-linkbutton" onclick="openUserSave();" data-options="iconCls:'icon-photo_add',plain:true">添加</a>
+    <a class="easyui-linkbutton" onclick="openGoodsSave();" data-options="iconCls:'icon-photo_add',plain:true">添加</a>
 </div>
 
 <%--用户保存对话框--%>
