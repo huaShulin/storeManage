@@ -5,9 +5,22 @@ type OrderAddGoodsParam struct {
 	Number int `form:"number"`
 }
 
+type OrderResult struct {
+	Order		[]Order		`json:"rows"`
+	Total		int			`json:"total"`
+}
+
+type Order struct {
+	Id			string		`json:"id"`
+	Sum			float64		`json:"sum"`
+	UserId		string		`json:"userId"`
+	UserName	string		`json:"userName"`
+	Time		string		`json:"time"`
+}
+
 type OrderGoodsResult struct {
 	OrderGoods		[]OrderGoods		`json:"rows"`
-	Total		int			`json:"total"`
+	Total			int			`json:"total"`
 }
 type OrderGoods struct {
 	Id 			string		`json:"id"`

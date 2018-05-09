@@ -9,16 +9,8 @@ func init() {
 
 	beego.GlobalControllerRouter["storeManage/controllers:GoodsController"] = append(beego.GlobalControllerRouter["storeManage/controllers:GoodsController"],
 		beego.ControllerComments{
-			Method: "GetGoods",
-			Router: `/queryAll`,
-			AllowHTTPMethods: []string{"POST"},
-			MethodParams: param.Make(),
-			Params: nil})
-
-	beego.GlobalControllerRouter["storeManage/controllers:GoodsController"] = append(beego.GlobalControllerRouter["storeManage/controllers:GoodsController"],
-		beego.ControllerComments{
-			Method: "SaveEditId",
-			Router: `/saveEditId`,
+			Method: "EditGoods",
+			Router: `/edit`,
 			AllowHTTPMethods: []string{"POST"},
 			MethodParams: param.Make(),
 			Params: nil})
@@ -33,8 +25,16 @@ func init() {
 
 	beego.GlobalControllerRouter["storeManage/controllers:GoodsController"] = append(beego.GlobalControllerRouter["storeManage/controllers:GoodsController"],
 		beego.ControllerComments{
-			Method: "EditGoods",
-			Router: `/edit`,
+			Method: "GetGoods",
+			Router: `/queryAll`,
+			AllowHTTPMethods: []string{"POST"},
+			MethodParams: param.Make(),
+			Params: nil})
+
+	beego.GlobalControllerRouter["storeManage/controllers:GoodsController"] = append(beego.GlobalControllerRouter["storeManage/controllers:GoodsController"],
+		beego.ControllerComments{
+			Method: "DeleteGoods",
+			Router: `/remove`,
 			AllowHTTPMethods: []string{"POST"},
 			MethodParams: param.Make(),
 			Params: nil})
@@ -49,8 +49,8 @@ func init() {
 
 	beego.GlobalControllerRouter["storeManage/controllers:GoodsController"] = append(beego.GlobalControllerRouter["storeManage/controllers:GoodsController"],
 		beego.ControllerComments{
-			Method: "DeleteGoods",
-			Router: `/remove`,
+			Method: "SaveEditId",
+			Router: `/saveEditId`,
 			AllowHTTPMethods: []string{"POST"},
 			MethodParams: param.Make(),
 			Params: nil})
@@ -82,15 +82,7 @@ func init() {
 	beego.GlobalControllerRouter["storeManage/controllers:OrderController"] = append(beego.GlobalControllerRouter["storeManage/controllers:OrderController"],
 		beego.ControllerComments{
 			Method: "GetOrder",
-			Router: `/queryAll`,
-			AllowHTTPMethods: []string{"POST"},
-			MethodParams: param.Make(),
-			Params: nil})
-
-	beego.GlobalControllerRouter["storeManage/controllers:OrderController"] = append(beego.GlobalControllerRouter["storeManage/controllers:OrderController"],
-		beego.ControllerComments{
-			Method: "GetNowOrder",
-			Router: `/nowOrder`,
+			Router: `/`,
 			AllowHTTPMethods: []string{"POST"},
 			MethodParams: param.Make(),
 			Params: nil})
@@ -99,6 +91,30 @@ func init() {
 		beego.ControllerComments{
 			Method: "OrderAddGoods",
 			Router: `/addGoods`,
+			AllowHTTPMethods: []string{"POST"},
+			MethodParams: param.Make(),
+			Params: nil})
+
+	beego.GlobalControllerRouter["storeManage/controllers:OrderController"] = append(beego.GlobalControllerRouter["storeManage/controllers:OrderController"],
+		beego.ControllerComments{
+			Method: "CreateOrder",
+			Router: `/create`,
+			AllowHTTPMethods: []string{"GET"},
+			MethodParams: param.Make(),
+			Params: nil})
+
+	beego.GlobalControllerRouter["storeManage/controllers:OrderController"] = append(beego.GlobalControllerRouter["storeManage/controllers:OrderController"],
+		beego.ControllerComments{
+			Method: "GetOrderSum",
+			Router: `/getSum`,
+			AllowHTTPMethods: []string{"GET"},
+			MethodParams: param.Make(),
+			Params: nil})
+
+	beego.GlobalControllerRouter["storeManage/controllers:OrderController"] = append(beego.GlobalControllerRouter["storeManage/controllers:OrderController"],
+		beego.ControllerComments{
+			Method: "GetNowOrder",
+			Router: `/nowOrder`,
 			AllowHTTPMethods: []string{"POST"},
 			MethodParams: param.Make(),
 			Params: nil})

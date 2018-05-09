@@ -14,12 +14,12 @@ type OrderController struct {
 // @Title Order
 // @Description 获取订单
 // @Param body body Page true "分页"
-// @Success 200 {object} []models.Goods "返回结果"
-// @Failure 400 {object} []models.Goods "返回结果"
-// @router /queryAll [POST]
+// @Success 200 {object} models.OrderResult "返回结果"
+// @Failure 400 {object} models.OrderResult "返回结果"
+// @router / [POST]
 func (o *OrderController) GetOrder() {
 	//var reply []models.Goods
-	var reply models.GoodsResult
+	var reply models.OrderResult
 
 	in := models.PageInfo{}
 	o.ParseForm(&in)
@@ -27,8 +27,30 @@ func (o *OrderController) GetOrder() {
 	fmt.Println("PAGE:", in.Page)
 	fmt.Println("SIZE:", in.Rows)
 
-	//reply.Goods = services.GetGoodss(in)
-	reply.Total = 10
+	reply = services.GetOrder(in)
+
+	o.Ctx.Output.Status = 200
+	o.Data["json"] = reply
+	o.ServeJSON()
+}
+
+
+//生成订单
+// @router /create [GET]
+func (o *OrderController) CreateOrder() {
+	var reply models.Result
+
+	orderGoodsSession := o.GetSession("orderGoodsList")
+	userId := o.GetSession("id").(string)
+	if orderGoodsSession != nil {
+		orderGoodsList := orderGoodsSession.(map[string]int)
+		reply = services.CreateOrder(userId, orderGoodsList)
+	}
+
+	if reply.Success {
+		o.DelSession("orderGoodsList")
+	}
+
 	o.Ctx.Output.Status = 200
 	o.Data["json"] = reply
 	o.ServeJSON()
@@ -54,6 +76,23 @@ func (o *OrderController) GetNowOrder() {
 	if orderGoodsSession != nil {
 		orderGoodsList := orderGoodsSession.(map[string]int)
 		reply = services.GetNowOrder(in, orderGoodsList)
+	}
+
+	o.Ctx.Output.Status = 200
+	o.Data["json"] = reply
+	o.ServeJSON()
+}
+
+// 获取订单价格
+// @router /getSum [GET]
+func (o *OrderController) GetOrderSum() {
+	//var reply []models.Goods
+	var reply models.Result
+
+	orderGoodsSession := o.GetSession("orderGoodsList")
+	if orderGoodsSession != nil {
+		orderGoodsList := orderGoodsSession.(map[string]int)
+		reply = services.GetOrderSum(orderGoodsList)
 	}
 
 	o.Ctx.Output.Status = 200
