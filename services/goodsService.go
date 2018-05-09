@@ -36,7 +36,7 @@ func GetGoodss(info models.PageInfo) (models.GoodsResult) {
 		temp.Src = goods.Src
 		temp.Remark = goods.Remark
 		temp.Number = goods.Number
-		temp.Purchase = temp.Purchase
+		temp.Purchase = goods.Purchase
 		temp.Type = goods.Type
 		result.Goods = append(result.Goods, temp)
 	}
