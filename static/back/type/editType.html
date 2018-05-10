@@ -1,0 +1,30 @@
+
+<script>
+    $(function(){
+        $("#typeEditForm").form('load','/hyl/type/getEditGoods');
+    });
+
+</script>
+<div style="text-align: center;">
+    <form id="typeEditForm" method="post">
+        <div style="margin-top: 1%">
+            类名
+            <input name="name" class="easyui-textbox" data-options="required:true"/>
+        </div>
+        <div style="margin-top: 1%">
+            父类
+            <input name="typeId"
+                   class="easyui-combobox"
+                   style="width: 15%"
+                   data-options="
+                                url:'/hyl/type',
+                                method:'get',
+                                valueField:'id',
+                                textField:'name',
+                                panelHeight:'auto',
+                                onSelect: function(rec){
+                                    }
+			        ">
+        </div>
+    </form>
+</div>

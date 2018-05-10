@@ -1,0 +1,25 @@
+<div style="text-align: center; margin-top: 3%">
+    <form id="typeSaveForm" method="post" enctype="multipart/form-data">
+        <div style="margin-top: 1%">
+            类&nbsp;&nbsp;&nbsp;&nbsp;名
+            <input name="name" class="easyui-textbox" data-options="required:true"/>
+        </div>
+        <div style="margin-top: 1%">
+            分类
+            <input name="typeId"
+                   class="easyui-combobox"
+                   style="width: 15%"
+                   data-options="
+                                url:'/hyl/type',
+                                method:'get',
+                                valueField:'id',
+                                textField:'name',
+                                panelHeight:'auto',
+                                onSelect: function(rec){
+                                    }
+			        ">
+        </div>
+    </form>
+</div>
+<script>
+</script>

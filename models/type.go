@@ -10,3 +10,19 @@ type Type struct {
 	Name 		string		`json:"name"`
 	ParentId 	string 		`json:"parentId"`
 }
+
+type TypePageResult struct {
+	TypePages	[]TypePage	`json:"rows"`
+	Total		int			`json:"total"`
+}
+
+type TypePage struct {
+	Id 			string		`json:"id"`
+	Name 		string		`json:"name"`
+	Parent 		string 		`json:"parent"`
+}
+
+type TypeParam struct {
+	Name 		string		`form:"name"`
+	ParentId	string		`form:"parentId"`
+}

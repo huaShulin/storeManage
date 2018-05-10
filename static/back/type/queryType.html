@@ -1,0 +1,157 @@
+<script type="text/javascript">
+
+    $(function () {
+        $("#typeDatagrid").datagrid({
+            fit:true,
+            fitColumns:false,
+            pagination:true,
+            pageList:[2,3,5,10],
+            pageNumber:1,
+            pageSize:5,
+            url:'/hyl/type/queryAll',
+            columns:[[
+                {title:'类名',field:'name',width:150,align:'center'},
+                {title:'父类名',field:'parent',width:100,align:'center'},
+                {title:'商品数',field:'number',width:70,align:'center'},
+                {title:'操作',field:'options',width:300,align:'center'
+                    ,formatter:function (value,row,index) {
+                        return "<a class='option' data-options=\"plain:true,iconCls:'icon-photo_edit'\" onclick=\"openTypeEdit('"+ row.id +"')\">修改</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"+
+                                "<a class='option' data-options=\"plain:true,iconCls:'icon-photo_edit'\" onclick=\"typeDelete('"+ row.id +"')\">删除</a>"
+                    }
+                }
+            ]],
+            onLoadSuccess:function () {
+                $(".option").linkbutton();
+            },
+            toolbar:'#typeTools'
+        });
+    });
+
+    //add
+    function typeSave() {
+        $('#typeSaveForm').form('submit', {
+            url:'/hyl/type/save',
+            onSubmit: function(user){
+                //return $('#userSaveForm').form('validate');
+                return true;
+            },
+            success:function(data){
+                var data = eval('(' + data + ')');
+                if (data.success){
+                    $('#openTypeSave').dialog('close',true);
+                    //var tab = $tabs.tabs('getSelected');
+                    //tab.panel('refresh');
+                    $("#typeDatagrid").datagrid('reload');
+                } else {
+                    alert(data.message)
+                }
+            }
+        });
+    }
+    //Open User Save
+    function openTypeSave() {
+        $("#openTypeSave").dialog({
+            top:200,
+            width:680,
+            title:"保存商品",
+            iconCls:'icon-photo_edit',
+            href:'/static/back/type/saveType.html',
+            buttons:[{
+                text:'保存',
+                iconCls:'icon-save',
+                handler:typeSave
+            },{
+                text:'关闭',
+                iconCls:'icon-cancel',
+                handler:function () {
+                    $("#openTypeSave").dialog('close',true);
+                }
+            }]
+        });
+    }
+
+    //update
+    function typeEdit() {
+        $('#typeEditForm').form('submit', {
+            url:'/hyl/type/edit',
+            onSubmit: function(user){
+                return $('#typeEditForm').form('validate');
+            },
+            success:function(data){
+                var data = eval('(' + data + ')');
+                if (data.success){
+                    //var tab = $tabs.tabs('getSelected');
+                    //tab.panel('refresh');
+                    $("#typeDatagrid").datagrid('reload');
+                    $('#openTypeEdit').dialog('close',true);
+                } else {
+                    alert(data.message)
+                }
+            }
+        });
+    }
+    //Open Update dialog
+    function openTypeEdit(id) {
+        $.post('/hyl/type/saveEditId', {"id":id}, function(data){
+
+        }, 'json');
+        $("#openTypeEdit").dialog({
+            top:200,
+            width:700,
+            title:"修改商品信息",
+            iconCls:'icon-man',
+            href:'/static/back/type/editType.html',
+            buttons:[{
+                text:'保存',
+                iconCls:'icon-save',
+                handler:typeEdit
+            },{
+                text:'关闭',
+                iconCls:'icon-cancel',
+                handler:function () {
+                    $("#openTypeEdit").dialog('close',true);
+                }
+            }]
+        });
+    }
+
+    //delete
+    function typeDelete(id) {
+        console.log(id);
+        //友情提醒
+        $.messager.confirm('提示','确定要删除吗?',function(r){
+            if(r){
+                //发送ajax请求删除商品
+                $.post('/hyl/type/remove',{"id":id},function(){
+                    var tab = $tabs.tabs('getSelected');
+                    tab.panel('refresh');
+                    $.messager.show({
+                        title:'提示',
+                        msg:'类型删除成功...',
+                    });
+                    //刷新datagrid
+                    $("#dg").datagrid('reload');//始终保持在当前页展示
+                });
+            }
+
+        });
+    }
+    
+</script>
+
+<!--datagrid-->
+<table id="typeDatagrid"></table>
+
+<%--工具栏--%>
+<div id="typeTools">
+    <a class="easyui-linkbutton" onclick="openTypeSave();" data-options="iconCls:'icon-photo_add',plain:true">添加</a>
+</div>
+
+<%--用户保存对话框--%>
+<div id="openTypeSave"></div>
+
+<%--用户修改对话框--%>
+<div id="openTypeEdit"></div>
+
+<%--用户头像预览对话框--%>
+<div id="openTypeInline"></div>
