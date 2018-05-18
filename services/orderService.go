@@ -138,7 +138,7 @@ func CreateOrder(userId string, orderGoodss map[string]int) (models.Result) {
 	tempOrder.UserId = userId
 	var tempUser modelDB.User
 	db.Table("TB_USER").Where(" ID = ? ", userId).Scan(&tempUser)
-	tempOrder.UserName = tempUser.Username
+	tempOrder.UserName = tempUser.Name
 	tempOrder.Sum = allSum
 	tempOrder.Time = time.Now().Format("20060102150405")
 	db.Table("TB_ORDER").Save(&tempOrder)

@@ -1,31 +1,35 @@
 
 <script>
     $(function(){
-        $("#typeEditForm").form('load','/hyl/type/getEditGoods');
+        $("#userEditForm").form('load','/hyl/user/getEditUser');
     });
 
 </script>
 <div style="text-align: center;">
-    <form id="typeEditForm" method="post">
-        <div style="margin-top: 1%">
-            类名
+    <form id="userEditForm" method="post">
+        <div style="margin-top: 1%;">
+            姓&nbsp;&nbsp;&nbsp;&nbsp;名
             <input name="name" class="easyui-textbox" data-options="required:true"/>
         </div>
         <div style="margin-top: 1%">
-            父类
+            职&nbsp;&nbsp;&nbsp;&nbsp;位
             <input name="typeId"
                    class="easyui-combobox"
-                   style="width: 15%"
+                   style="width: 30%"
                    data-options="
-                                url:'/hyl/type',
+                                url:'/hyl/role',
                                 method:'get',
                                 valueField:'id',
                                 textField:'name',
+                                multiple:true,
                                 panelHeight:'auto',
                                 onSelect: function(rec){
                                     }
-                                "
-			>
+			        ">
         </div>
+        <!--<div style="margin-top: 1%">
+            选择图片
+            <input class="easyui-filebox" name="multipartFile" style="width: 23%">
+        </div>-->
     </form>
 </div>

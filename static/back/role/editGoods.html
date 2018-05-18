@@ -1,0 +1,50 @@
+
+<script>
+    $(function(){
+        $("#goodsEditForm").form('load','/hyl/goods/getEditGoods');
+    });
+
+</script>
+<div style="text-align: center;">
+    <form id="goodsEditForm" method="post">
+        <div style="margin-top: 1%">
+            商&nbsp;品&nbsp;名
+            <input name="name" class="easyui-textbox" data-options="required:true"/>
+        </div>
+        <div style="margin-top: 1%;">
+            价&nbsp;&nbsp;&nbsp;&nbsp;格
+            <input name="price" class="easyui-textbox" data-options="required:true"/>
+        </div>
+        <div style="margin-top: 1%;">
+            数&nbsp;&nbsp;&nbsp;&nbsp;量
+            <input name="number" class="easyui-textbox" data-options="required:true"/>
+        </div>
+        <div style="margin-top: 1%;">
+            提示数量
+            <input name="purchase" class="easyui-textbox" data-options="required:true"/>
+        </div>
+        <div style="margin-top: 1%">
+            分类
+            <input name="typeId"
+                   class="easyui-combobox"
+                   style="width: 15%"
+                   data-options="
+                                url:'/hyl/type',
+                                method:'get',
+                                valueField:'id',
+                                textField:'name',
+                                panelHeight:'auto',
+                                onSelect: function(rec){
+                                    }
+			        ">
+        </div>
+        <div style="margin-top: 1%;">
+            描述
+            <input class="easyui-textbox" name="remark" data-options="required:true"><br/>
+        </div>
+        <div style="margin-top: 1%">
+            选择图片
+            <input class="easyui-filebox" name="multipartFile" style="width: 23%">
+        </div>
+    </form>
+</div>

@@ -1,0 +1,202 @@
+<script type="text/javascript">
+
+    $(function () {
+        $("#userDatagrid").datagrid({
+            fit:true,
+            fitColumns:false,
+            pagination:true,
+            pageList:[2,3,5,10],
+            pageNumber:1,
+            pageSize:5,
+            url:'/hyl/user/queryAll',
+            columns:[[
+                {title:'姓名',field:'name',width:150,align:'center'},
+                {title:'职位',field:'role',width:150,align:'center'},
+                {title:'手机号',field:'phone',width:100,align:'center'},
+                {title:'状态',field:'status',width:100,align:'center'},
+                {title:'操作',field:'options',width:300,align:'center'
+                    ,formatter:function (value,row,index) {
+                        return "<a class='option' data-options=\"plain:true,iconCls:'icon-photo'\" onclick=\"userStatus('"+ row.id +"')\">变更状态</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"+
+                                "<a class='option' data-options=\"plain:true,iconCls:'icon-photo_edit'\" onclick=\"openUserEdit('"+ row.id +"')\">修改</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"+
+                                "<a class='option' data-options=\"plain:true,iconCls:'icon-photo_edit'\" onclick=\"userDelete('"+ row.id +"')\">删除</a>"
+                    }
+                }
+            ]],
+            onLoadSuccess:function () {
+                $(".option").linkbutton();
+            },
+            toolbar:'#userTools'
+        });
+    });
+
+    //add
+    function userSave() {
+        $('#userSaveForm').form('submit', {
+            url:'/hyl/user/save',
+            onSubmit: function(user){
+                //return $('#userSaveForm').form('validate');
+                return true;
+            },
+            success:function(data){
+                var data = eval('(' + data + ')');
+                if (data.success){
+                    $('#openUserSave').dialog('close',true);
+                    //var tab = $tabs.tabs('getSelected');
+                    //tab.panel('refresh');
+                    $("#userDatagrid").datagrid('reload');
+                } else {
+                    alert(data.message)
+                }
+            }
+        });
+    }
+    //Open User Save
+    function openUserSave() {
+        $("#openUserSave").dialog({
+            top:200,
+            width:680,
+            title:"保存商品",
+            iconCls:'icon-photo_edit',
+            href:'/static/back/user/saveUser.html',
+            buttons:[{
+                text:'保存',
+                iconCls:'icon-save',
+                handler:userSave
+            },{
+                text:'关闭',
+                iconCls:'icon-cancel',
+                handler:function () {
+                    $("#openUserSave").dialog('close',true);
+                }
+            }]
+        });
+    }
+
+    function userStatus(id) {
+        console.log(id);
+        //友情提醒
+        $.messager.confirm('提示','确定要变更状态吗?',function(r){
+            if(r){
+                //发送ajax请求删除商品
+                $.post('/hyl/user/status',{"id":id},function(){
+                    var tab = $tabs.tabs('getSelected');
+                    tab.panel('refresh');
+                    $.messager.show({
+                        title:'提示',
+                        msg:'状态变更成功...',
+                    });
+                    //刷新datagrid
+                    $("#dg").datagrid('reload');//始终保持在当前页展示
+                });
+            }
+
+        });
+    }
+
+    //delete
+    function userDelete(id) {
+        console.log(id);
+        //友情提醒
+        $.messager.confirm('提示','确定要删除吗?',function(r){
+            if(r){
+                //发送ajax请求删除商品
+                $.post('/hyl/user/remove',{"id":id},function(){
+                    var tab = $tabs.tabs('getSelected');
+                    tab.panel('refresh');
+                    $.messager.show({
+                        title:'提示',
+                        msg:'商品删除成功...',
+                    });
+                    //刷新datagrid
+                    $("#dg").datagrid('reload');//始终保持在当前页展示
+                });
+            }
+
+        });
+    }
+
+    //update
+    function userEdit() {
+        $('#userEditForm').form('submit', {
+            url:'/hyl/user/edit',
+            onSubmit: function(user){
+                return $('#userEditForm').form('validate');
+            },
+            success:function(data){
+                var data = eval('(' + data + ')');
+                if (data.success){
+                    //var tab = $tabs.tabs('getSelected');
+                    //tab.panel('refresh');
+                    $("#userDatagrid").datagrid('reload');
+                    $('#openUserEdit').dialog('close',true);
+                } else {
+                    alert(data.message)
+                }
+            }
+        });
+    }
+    //Open Update dialog
+    function openUserEdit(id) {
+        $.post('/hyl/user/saveEditId', {"id":id}, function(data){
+
+        }, 'json');
+        $("#openUserEdit").dialog({
+            top:200,
+            width:700,
+            title:"修改商品信息",
+            iconCls:'icon-man',
+            href:'/static/back/user/editUser.html',
+            buttons:[{
+                text:'保存',
+                iconCls:'icon-save',
+                handler:userEdit
+            },{
+                text:'关闭',
+                iconCls:'icon-cancel',
+                handler:function () {
+                    $("#openUserEdit").dialog('close',true);
+                }
+            }]
+        });
+    }
+
+    //Open Inline dialog
+    //暂未成功
+    function openUserInline(id) {
+        $("#openUserEdit").dialog({
+            top:200,
+            width:700,
+            title:"修改商品信息",
+            iconCls:'icon-man',
+            href:'/user/inline?src='+src,
+            buttons:[{
+                text:'关闭',
+                iconCls:'icon-cancel',
+                handler:function () {
+                    $("#openUserEdit").dialog('close',true);
+                }
+            }]
+        });
+    }
+
+
+
+    
+</script>
+
+<!--datagrid-->
+<table id="userDatagrid"></table>
+
+<%--工具栏--%>
+<div id="userTools">
+    <a class="easyui-linkbutton" onclick="openUserSave();" data-options="iconCls:'icon-photo_add',plain:true">添加</a>
+</div>
+
+<%--用户保存对话框--%>
+<div id="openUserSave"></div>
+
+<%--用户修改对话框--%>
+<div id="openUserEdit"></div>
+
+<%--用户头像预览对话框--%>
+<div id="openUserInline"></div>

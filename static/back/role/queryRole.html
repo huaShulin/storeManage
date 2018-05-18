@@ -1,0 +1,201 @@
+<script type="text/javascript">
+
+    $(function () {
+        $("#roleDatagrid").datagrid({
+            fit:true,
+            fitColumns:false,
+            pagination:true,
+            pageList:[2,3,5,10],
+            pageNumber:1,
+            pageSize:5,
+            url:'/hyl/role/queryAll',
+            columns:[[
+                {title:'职位',field:'name',width:150,align:'center'},
+                {title:'权限',field:'menu',width:130,align:'center'},
+                {title:'人数',field:'number',width:100,align:'center'},
+                {title:'操作',field:'options',width:300,align:'center'
+                    ,formatter:function (value,row,index) {
+                        return "<a class='option' data-options=\"plain:true,iconCls:'icon-photo_edit'\" onclick=\"openGoodsEdit('"+ row.id +"')\">修改</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"+
+                                "<a class='option' data-options=\"plain:true,iconCls:'icon-photo_edit'\" onclick=\"roleDelete('"+ row.id +"')\">删除</a>"
+                    }
+                }
+            ]],
+            onLoadSuccess:function () {
+                $(".option").linkbutton();
+            },
+            toolbar:'#roleTools'
+        });
+    });
+
+    //add
+    functionRoleSave() {
+        $('#roleSaveForm').form('submit', {
+            url:'/hyl/role/save',
+            onSubmit: function(user){
+                //return $('#userSaveForm').form('validate');
+                return true;
+            },
+            success:function(data){
+                var data = eval('(' + data + ')');
+                if (data.success){
+                    $('#openRoleSave').dialog('close',true);
+                    //var tab = $tabs.tabs('getSelected');
+                    //tab.panel('refresh');
+                    $("#roleDatagrid").datagrid('reload');
+                } else {
+                    alert(data.message)
+                }
+            }
+        });
+    }
+    //Open User Save
+    function openRoleSave() {
+        $("#openRoleSave").dialog({
+            top:200,
+            width:680,
+            title:"保存商品",
+            iconCls:'icon-photo_edit',
+            href:'/static/back/role/saveRole.html',
+            buttons:[{
+                text:'保存',
+                iconCls:'icon-save',
+                handler:roleSave
+            },{
+                text:'关闭',
+                iconCls:'icon-cancel',
+                handler:function () {
+                    $("#openRoleSave").dialog('close',true);
+                }
+            }]
+        });
+    }
+
+    function roleInline(src) {
+        window.open('/hyl/role/inline?src='+src);
+    }
+
+    //update
+    function roleEdit() {
+        $('#roleEditForm').form('submit', {
+            url:'/hyl/role/edit',
+            onSubmit: function(user){
+                return $('#roleEditForm').form('validate');
+            },
+            success:function(data){
+                var data = eval('(' + data + ')');
+                if (data.success){
+                    //var tab = $tabs.tabs('getSelected');
+                    //tab.panel('refresh');
+                    $("#roleDatagrid").datagrid('reload');
+                    $('#openRoleEdit').dialog('close',true);
+                } else {
+                    alert(data.message)
+                }
+            }
+        });
+    }
+    //Open Update dialog
+    function openRoleEdit(id) {
+        $.post('/hyl/role/saveEditId', {"id":id}, function(data){
+
+        }, 'json');
+        $("#openRoleEdit").dialog({
+            top:200,
+            width:700,
+            title:"修改商品信息",
+            iconCls:'icon-man',
+            href:'/static/back/role/editRole.html',
+            buttons:[{
+                text:'保存',
+                iconCls:'icon-save',
+                handler:roleEdit
+            },{
+                text:'关闭',
+                iconCls:'icon-cancel',
+                handler:function () {
+                    $("#openRoleEdit").dialog('close',true);
+                }
+            }]
+        });
+    }
+
+    //Open Inline dialog
+    //暂未成功
+    function openRoleInline(id) {
+        $("#openUserEdit").dialog({
+            top:200,
+            width:700,
+            title:"修改商品信息",
+            iconCls:'icon-man',
+            href:'/user/inline?src='+src,
+            buttons:[{
+                text:'关闭',
+                iconCls:'icon-cancel',
+                handler:function () {
+                    $("#openUserEdit").dialog('close',true);
+                }
+            }]
+        });
+    }
+
+    //delete
+    function roleDelete(id) {
+        console.log(id);
+        //友情提醒
+        $.messager.confirm('提示','确定要删除吗?',function(r){
+            if(r){
+                //发送ajax请求删除商品
+                $.post('/hyl/role/remove',{"id":id},function(){
+                    var tab = $tabs.tabs('getSelected');
+                    tab.panel('refresh');
+                    $.messager.show({
+                        title:'提示',
+                        msg:'商品删除成功...',
+                    });
+                    //刷新datagrid
+                    $("#dg").datagrid('reload');//始终保持在当前页展示
+                });
+            }
+
+        });
+    }
+
+    //加入订单
+    function roleJoin(id) {
+        console.log(id);
+        //友情提醒
+        $.messager.prompt('加入订单','请输入订单数量?',function(r){
+            if(r){
+                //发送ajax请求订单商品
+                $.post('/hyl/order/addRole',{"id":id,"number":r},function(result){
+                    var tab = $tabs.tabs('getSelected');
+                    tab.panel('refresh');
+                    $.messager.show({
+                        title:'提示',
+                        msg:result.message,
+                    });
+                });
+            }
+
+        });
+    }
+
+    
+</script>
+
+<!--datagrid-->
+<table id="roleDatagrid"></table>
+
+<%--工具栏--%>
+<div id="roleTools">
+    <a class="easyui-linkbutton" onclick="openRoleSave();" data-options="iconCls:'icon-photo_add',plain:true">添加</a>
+</div>
+
+<%--用户保存对话框--%>
+<div id="openRoleSave"></div>
+
+<%--用户修改对话框--%>
+<div id="openRoleEdit"></div>
+
+<%--用户头像预览对话框--%>
+<div id="openRoleInline"></div>

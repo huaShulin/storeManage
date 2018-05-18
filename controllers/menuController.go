@@ -5,6 +5,7 @@ import (
 	"storeManage/models"
 	"storeManage/services"
 	"fmt"
+	"storeManage/modelDB"
 )
 
 type MenuController struct {
@@ -19,12 +20,11 @@ type MenuController struct {
 func (m *MenuController) GetMenu() {
 	var reply models.MenuResult
 
-	userId := m.GetSession("id")
+	user := m.GetSession("user")
+	use := user.(modelDB.User)
+	fmt.Print("获取菜单",use)
 
-	s := userId.(string)
-	fmt.Print("获取菜单",s)
-
-	reply = services.Menu(s)
+	reply = services.Menu(use.Id)
 	m.Ctx.Output.Status = 200
 	m.Data["json"] = reply
 	m.ServeJSON()
