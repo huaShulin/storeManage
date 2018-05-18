@@ -19,7 +19,7 @@ type RoleController struct {
 // @router /queryAll [POST]
 func (r *RoleController) GetUser() {
 	//var reply []models.Goods
-	var reply models.UserResult
+	var reply models.RoleResult
 
 	in := models.PageInfo{}
 	r.ParseForm(&in)
@@ -27,7 +27,7 @@ func (r *RoleController) GetUser() {
 	fmt.Println("PAGE:", in.Page)
 	fmt.Println("SIZE:", in.Rows)
 
-	reply = services.GetUsers(in)
+	reply = services.GetRole(in)
 	r.Ctx.Output.Status = 200
 	r.Data["json"] = reply
 	r.ServeJSON()

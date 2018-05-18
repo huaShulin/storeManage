@@ -9,7 +9,7 @@ type Role struct {
 	Id 			string		`json:"id"`
 	Name 		string		`json:"name"`
 	Menu		string		`json:"menu"`
-	Number		string		`json:"number"`
+	Number		int			`json:"number"`
 }
 
 type RoleParam struct {

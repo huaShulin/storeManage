@@ -1,5 +1,9 @@
 package modelDB
 
+const (
+	GET_MENU_LIST = " SELECT ID, NAME FROM TB_ROLE "
+)
+
 type Menu struct {
 
 	// ID

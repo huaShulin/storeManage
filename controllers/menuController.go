@@ -24,7 +24,7 @@ func (m *MenuController) GetMenu() {
 	use := user.(modelDB.User)
 	fmt.Print("获取菜单",use)
 
-	reply = services.Menu(use.Id)
+	reply = services.MenuByUser(use.Id)
 	m.Ctx.Output.Status = 200
 	m.Data["json"] = reply
 	m.ServeJSON()

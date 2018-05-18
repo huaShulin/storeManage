@@ -34,6 +34,11 @@ func init() {
 					&controllers.OrderController{},
 				),
 			),
+			beego.NSNamespace("/role",
+				beego.NSInclude(
+					&controllers.RoleController{},
+				),
+			),
 		)
 	beego.AddNamespace(ns)
 }

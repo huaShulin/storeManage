@@ -7,14 +7,38 @@ import (
 	"github.com/jinzhu/gorm"
 )
 
-func Menu(userId string) (models.MenuResult) {
+func MenuByUser(userId string) (models.MenuResult) {
 
 	var result models.MenuResult
 
 	db, _ := mysql.GetConn()
 
+	var ids []modelDB.ResultIds
+	err := db.Table("TB_USER_ROLE").Where(" USER_ID = ? ", userId).Scan(&ids).Error
+	if err != nil && err != gorm.ErrRecordNotFound {
+		result.Success = false
+		result.Message = "数据库异常"
+		return result
+	}
+	roleIds := make([]string, 0)
+	for _, id := range ids {
+		roleIds = append(roleIds, id.RoleId)
+	}
+
+	err = db.Table("TB_ROLE_MENU").Where(" ROLE_ID IN (?) ", roleIds).Scan(&ids).Error
+	if err != nil && err != gorm.ErrRecordNotFound {
+		result.Success = false
+		result.Message = "数据库异常"
+		return result
+	}
+	menuIds := make([]string, 0)
+	for _, id := range ids {
+		menuIds = append(menuIds, id.MenuId)
+	}
+
+
 	menus := make([]modelDB.Menu, 0)
-	err := db.Table("TB_MENU").Scan(&menus).Error
+	err = db.Table("TB_MENU").Where(" PARENT_ID = ? OR ID IN (?) ", "",menuIds).Scan(&menus).Error
 	if err != nil && err != gorm.ErrRecordNotFound {
 		result.Success = false
 		result.Message = "数据库异常"

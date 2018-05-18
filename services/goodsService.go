@@ -141,7 +141,7 @@ func CheckGoodsNumber(goodsId string, number int) models.Result {
 
 	db, _ := mysql.GetConn()
 
-	var num modelDB.Result
+	var num modelDB.ResultNumber
 	err := db.Raw(" SELECT NUMBER FROM TB_GOODS WHERE ID = ? ", goodsId).Scan(&num).Error
 	if err != nil {
 		result.Success = false
