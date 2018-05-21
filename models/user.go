@@ -20,9 +20,7 @@ type User struct {
 
 type UserParam struct {
 	Name 		string		`form:"name"`
-	Price 		float64		`form:"price"`
-	Remark 		string		`form:"remark"`
-	Number		int			`form:"number"`
-	Purchase	int			`form:"purchase"`
-	TypeId		string		`form:"typeId"`
+	Phone 		string		`form:"phone"`
+	Status		int			`form:"status"`
+	RoleIds		[]string	`form:"roleIds"`
 }

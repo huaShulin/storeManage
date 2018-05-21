@@ -1,0 +1,26 @@
+<div style="text-align: center; margin-top: 3%">
+    <form id="roleSaveForm" method="post" enctype="multipart/form-data">
+        <div style="margin-top: 1%">
+            职&nbsp;&nbsp;&nbsp;&nbsp;位
+            <input name="name" class="easyui-textbox" data-options="required:true"/>
+        </div>
+        <div style="margin-top: 1%">
+            拥有权限
+            <input name="menuIds"
+                   class="easyui-combobox"
+                   style="width: 30%"
+                   data-options="
+                                url:'/hyl/menu/child',
+                                method:'get',
+                                valueField:'id',
+                                textField:'name',
+                                multiple:true,
+                                panelHeight:'auto',
+                                onSelect: function(rec){
+                                    }
+			        ">
+        </div>
+    </form>
+</div>
+<script>
+</script>

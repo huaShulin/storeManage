@@ -29,3 +29,18 @@ func (m *MenuController) GetMenu() {
 	m.Data["json"] = reply
 	m.ServeJSON()
 }
+
+// @Title Menu
+// @Description 获取菜单
+// @Success 200 {object} models.MenuResult "返回结果"
+// @Failure 400 {object} models.MenuResult "返回结果"
+// @router /child [GET]
+func (m *MenuController) GetChildMenu() {
+	var reply []models.Menu
+
+	reply = services.MenuChild()
+	fmt.Println("reply:",reply)
+	m.Ctx.Output.Status = 200
+	m.Data["json"] = reply
+	m.ServeJSON()
+}

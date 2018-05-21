@@ -11,11 +11,11 @@
             url:'/hyl/role/queryAll',
             columns:[[
                 {title:'职位',field:'name',width:150,align:'center'},
-                {title:'权限',field:'menu',width:130,align:'center'},
+                {title:'权限',field:'menu',width:300,align:'center'},
                 {title:'人数',field:'number',width:100,align:'center'},
                 {title:'操作',field:'options',width:300,align:'center'
                     ,formatter:function (value,row,index) {
-                        return "<a class='option' data-options=\"plain:true,iconCls:'icon-photo_edit'\" onclick=\"openGoodsEdit('"+ row.id +"')\">修改</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"+
+                        return "<a class='option' data-options=\"plain:true,iconCls:'icon-photo_edit'\" onclick=\"openRoleEdit('"+ row.id +"')\">修改</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"+
                                 "<a class='option' data-options=\"plain:true,iconCls:'icon-photo_edit'\" onclick=\"roleDelete('"+ row.id +"')\">删除</a>"
                     }
                 }
@@ -28,7 +28,7 @@
     });
 
     //add
-    function RoleSave() {
+    function roleSave() {
         $('#roleSaveForm').form('submit', {
             url:'/hyl/role/save',
             onSubmit: function(user){
@@ -53,7 +53,7 @@
         $("#openRoleSave").dialog({
             top:200,
             width:680,
-            title:"保存商品",
+            title:"添加职位",
             iconCls:'icon-photo_edit',
             href:'/static/back/role/saveRole.html',
             buttons:[{
@@ -79,7 +79,8 @@
         $('#roleEditForm').form('submit', {
             url:'/hyl/role/edit',
             onSubmit: function(user){
-                return $('#roleEditForm').form('validate');
+                //return $('#roleEditForm').form('validate');
+                return true;
             },
             success:function(data){
                 var data = eval('(' + data + ')');
@@ -102,7 +103,7 @@
         $("#openRoleEdit").dialog({
             top:200,
             width:700,
-            title:"修改商品信息",
+            title:"修改职位信息",
             iconCls:'icon-man',
             href:'/static/back/role/editRole.html',
             buttons:[{
@@ -114,25 +115,6 @@
                 iconCls:'icon-cancel',
                 handler:function () {
                     $("#openRoleEdit").dialog('close',true);
-                }
-            }]
-        });
-    }
-
-    //Open Inline dialog
-    //暂未成功
-    function openRoleInline(id) {
-        $("#openUserEdit").dialog({
-            top:200,
-            width:700,
-            title:"修改商品信息",
-            iconCls:'icon-man',
-            href:'/user/inline?src='+src,
-            buttons:[{
-                text:'关闭',
-                iconCls:'icon-cancel',
-                handler:function () {
-                    $("#openUserEdit").dialog('close',true);
                 }
             }]
         });
@@ -150,7 +132,7 @@
                     tab.panel('refresh');
                     $.messager.show({
                         title:'提示',
-                        msg:'商品删除成功...',
+                        msg:'职位删除成功...',
                     });
                     //刷新datagrid
                     $("#dg").datagrid('reload');//始终保持在当前页展示
@@ -159,27 +141,6 @@
 
         });
     }
-
-    //加入订单
-    function roleJoin(id) {
-        console.log(id);
-        //友情提醒
-        $.messager.prompt('加入订单','请输入订单数量?',function(r){
-            if(r){
-                //发送ajax请求订单商品
-                $.post('/hyl/order/addRole',{"id":id,"number":r},function(result){
-                    var tab = $tabs.tabs('getSelected');
-                    tab.panel('refresh');
-                    $.messager.show({
-                        title:'提示',
-                        msg:result.message,
-                    });
-                });
-            }
-
-        });
-    }
-
     
 </script>
 

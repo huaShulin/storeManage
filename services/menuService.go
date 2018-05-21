@@ -78,3 +78,25 @@ func MenuByUser(userId string) (models.MenuResult) {
 	result.Success = true
 	return result
 }
+
+func MenuChild() ([]models.Menu) {
+
+	var result []models.Menu
+
+	db, _ := mysql.GetConn()
+
+	var menus []modelDB.Menu
+	err := db.Table("TB_MENU").Where(" PARENT_ID != ? ", "").Scan(&menus).Error
+	if err != nil && err != gorm.ErrRecordNotFound {
+		return nil
+	}
+
+	for _, menu := range menus {
+		var m models.Menu
+		m.Id = menu.Id
+		m.Name = menu.Name
+		result = append(result, m)
+	}
+
+	return result
+}

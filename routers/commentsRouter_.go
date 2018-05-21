@@ -17,7 +17,7 @@ func init() {
 
 	beego.GlobalControllerRouter["storeManage/controllers:GoodsController"] = append(beego.GlobalControllerRouter["storeManage/controllers:GoodsController"],
 		beego.ControllerComments{
-			Method: "SaveEditId",
+			Method: "SaveEditGoodsId",
 			Router: `/saveEditId`,
 			AllowHTTPMethods: []string{"POST"},
 			MethodParams: param.Make(),
@@ -59,6 +59,14 @@ func init() {
 		beego.ControllerComments{
 			Method: "GetMenu",
 			Router: `/`,
+			AllowHTTPMethods: []string{"GET"},
+			MethodParams: param.Make(),
+			Params: nil})
+
+	beego.GlobalControllerRouter["storeManage/controllers:MenuController"] = append(beego.GlobalControllerRouter["storeManage/controllers:MenuController"],
+		beego.ControllerComments{
+			Method: "GetChildMenu",
+			Router: `/child`,
 			AllowHTTPMethods: []string{"GET"},
 			MethodParams: param.Make(),
 			Params: nil})
@@ -105,16 +113,16 @@ func init() {
 
 	beego.GlobalControllerRouter["storeManage/controllers:RoleController"] = append(beego.GlobalControllerRouter["storeManage/controllers:RoleController"],
 		beego.ControllerComments{
-			Method: "GetUser",
-			Router: `/queryAll`,
-			AllowHTTPMethods: []string{"POST"},
+			Method: "Role",
+			Router: `/`,
+			AllowHTTPMethods: []string{"GET"},
 			MethodParams: param.Make(),
 			Params: nil})
 
 	beego.GlobalControllerRouter["storeManage/controllers:RoleController"] = append(beego.GlobalControllerRouter["storeManage/controllers:RoleController"],
 		beego.ControllerComments{
-			Method: "StatusUser",
-			Router: `/status`,
+			Method: "GetRole",
+			Router: `/queryAll`,
 			AllowHTTPMethods: []string{"POST"},
 			MethodParams: param.Make(),
 			Params: nil})
@@ -123,6 +131,38 @@ func init() {
 		beego.ControllerComments{
 			Method: "DeleteUser",
 			Router: `/remove`,
+			AllowHTTPMethods: []string{"POST"},
+			MethodParams: param.Make(),
+			Params: nil})
+
+	beego.GlobalControllerRouter["storeManage/controllers:RoleController"] = append(beego.GlobalControllerRouter["storeManage/controllers:RoleController"],
+		beego.ControllerComments{
+			Method: "SaveRole",
+			Router: `/save`,
+			AllowHTTPMethods: []string{"POST"},
+			MethodParams: param.Make(),
+			Params: nil})
+
+	beego.GlobalControllerRouter["storeManage/controllers:RoleController"] = append(beego.GlobalControllerRouter["storeManage/controllers:RoleController"],
+		beego.ControllerComments{
+			Method: "SaveEditRoleId",
+			Router: `/saveEditId`,
+			AllowHTTPMethods: []string{"POST"},
+			MethodParams: param.Make(),
+			Params: nil})
+
+	beego.GlobalControllerRouter["storeManage/controllers:RoleController"] = append(beego.GlobalControllerRouter["storeManage/controllers:RoleController"],
+		beego.ControllerComments{
+			Method: "GetEditRole",
+			Router: `/getEditRole`,
+			AllowHTTPMethods: []string{"GET"},
+			MethodParams: param.Make(),
+			Params: nil})
+
+	beego.GlobalControllerRouter["storeManage/controllers:RoleController"] = append(beego.GlobalControllerRouter["storeManage/controllers:RoleController"],
+		beego.ControllerComments{
+			Method: "EditRole",
+			Router: `/edit`,
 			AllowHTTPMethods: []string{"POST"},
 			MethodParams: param.Make(),
 			Params: nil})
@@ -219,6 +259,30 @@ func init() {
 		beego.ControllerComments{
 			Method: "DeleteUser",
 			Router: `/remove`,
+			AllowHTTPMethods: []string{"POST"},
+			MethodParams: param.Make(),
+			Params: nil})
+
+	beego.GlobalControllerRouter["storeManage/controllers:UserController"] = append(beego.GlobalControllerRouter["storeManage/controllers:UserController"],
+		beego.ControllerComments{
+			Method: "SaveEditUserId",
+			Router: `/saveEditId`,
+			AllowHTTPMethods: []string{"POST"},
+			MethodParams: param.Make(),
+			Params: nil})
+
+	beego.GlobalControllerRouter["storeManage/controllers:UserController"] = append(beego.GlobalControllerRouter["storeManage/controllers:UserController"],
+		beego.ControllerComments{
+			Method: "GetEditUser",
+			Router: `/getEditUser`,
+			AllowHTTPMethods: []string{"GET"},
+			MethodParams: param.Make(),
+			Params: nil})
+
+	beego.GlobalControllerRouter["storeManage/controllers:UserController"] = append(beego.GlobalControllerRouter["storeManage/controllers:UserController"],
+		beego.ControllerComments{
+			Method: "EditUser",
+			Router: `/edit`,
 			AllowHTTPMethods: []string{"POST"},
 			MethodParams: param.Make(),
 			Params: nil})

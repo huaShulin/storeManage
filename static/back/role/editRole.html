@@ -1,27 +1,23 @@
 
 <script>
     $(function(){
-        $("#userEditForm").form('load','/hyl/user/getEditUser');
+        $("#roleEditForm").form('load','/hyl/role/getEditRole');
     });
 
 </script>
 <div style="text-align: center;">
-    <form id="userEditForm" method="post">
-        <div style="margin-top: 1%;">
-            姓&nbsp;&nbsp;&nbsp;&nbsp;名
-            <input name="name" class="easyui-textbox" data-options="required:true"/>
-        </div>
-        <div style="margin-top: 1%;">
-            手&nbsp;机&nbsp;号
-            <input name="phone" class="easyui-textbox" data-options="required:true"/>
-        </div>
+    <form id="roleEditForm" method="post">
         <div style="margin-top: 1%">
             职&nbsp;&nbsp;&nbsp;&nbsp;位
-            <input name="roleIds"
+            <input name="name" class="easyui-textbox" data-options="required:true"/>
+        </div>
+        <div style="margin-top: 1%">
+            拥有权限
+            <input name="menuIds"
                    class="easyui-combobox"
                    style="width: 30%"
                    data-options="
-                                url:'/hyl/role',
+                                url:'/hyl/menu/child',
                                 method:'get',
                                 valueField:'id',
                                 textField:'name',
@@ -31,9 +27,5 @@
                                     }
 			        ">
         </div>
-        <!--<div style="margin-top: 1%">
-            选择图片
-            <input class="easyui-filebox" name="multipartFile" style="width: 23%">
-        </div>-->
     </form>
 </div>

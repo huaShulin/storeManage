@@ -17,3 +17,15 @@ type ResultIds struct {
 	RoleId			string	`gorm:"column:ROLE_ID" json:"ROLE_ID"`
 	MenuId			string	`gorm:"column:MENU_ID" json:"MENU_ID"`
 }
+
+type SaveRoleMenu struct {
+	Id 			string		`gorm:"column:ID" json:"ID"`
+	RoleId 		string		`gorm:"column:ROLE_ID" json:"ROLE_ID"`
+	MenuId		string		`gorm:"column:MENU_ID" json:"MENU_ID"`
+}
+
+type SaveUserRole struct {
+	Id 			string		`gorm:"column:ID" json:"ID"`
+	UserId		string		`gorm:"column:USER_ID" json:"USER_ID"`
+	RoleId 		string		`gorm:"column:ROLE_ID" json:"ROLE_ID"`
+}

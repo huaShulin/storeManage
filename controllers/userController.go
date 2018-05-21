@@ -116,3 +116,68 @@ func (u *UserController) DeleteUser() {
 	u.Data["json"] = reply
 	u.ServeJSON()
 }
+
+// @Title SaveEditId
+// @Description 获取修改角色ID
+// @Param body body models.SaveEditId true "修改商品ID"
+// @Success 200 {object} []models.Result "返回结果"
+// @Failure 400 {object} []models.Result "返回结果"
+// @router /saveEditId [POST]
+func (g *UserController) SaveEditUserId() {
+	var reply models.Result
+
+	in := models.IdParam{}
+	g.ParseForm(&in)
+	fmt.Println("SaveEditUserId:",in.Id)
+	g.SetSession("userEditId", in.Id)
+
+	g.Ctx.Output.Status = 200
+	reply.Success = true
+	reply.Message = "目标用户存储成功:ID=" + in.Id
+	g.Data["json"] = reply
+	g.ServeJSON()
+}
+
+// @Title GetEditRole
+// @Description 获取修改商品
+// @Success 200 {object} []models.Result "返回结果"
+// @Failure 400 {object} []models.Result "返回结果"
+// @router /getEditUser [GET]
+func (g *UserController) GetEditUser() {
+	var reply models.User
+
+	userId := g.GetSession("userEditId")
+	fmt.Print("userId:", userId)
+
+	reply = services.GetUser(userId.(string))
+
+	g.Ctx.Output.Status = 200
+	g.Data["json"] = reply
+	g.ServeJSON()
+}
+
+// @Title EditRole
+// @Description 修改角色信息
+// @Success 200 {object} models.Result "返回结果"
+// @Failure 400 {object} models.Result "返回结果"
+// @router /edit [POST]
+func (g *UserController) EditUser() {
+	var reply models.Result
+
+	userId := g.GetSession("userEditId")
+	fmt.Print("userId:", userId)
+
+	in := models.UserParam{}
+	g.ParseForm(&in)
+
+	roleInfo :=  make(map[string]interface{})
+	roleInfo["NAME"] = in.Name
+	roleInfo["PHONE"] = in.Phone
+	roleInfo["STATUS"] = in.Status
+
+	reply = services.EditUser(userId.(string), roleInfo, in.RoleIds)
+
+	g.Ctx.Output.Status = 200
+	g.Data["json"] = reply
+	g.ServeJSON()
+}

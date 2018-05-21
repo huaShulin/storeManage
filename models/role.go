@@ -14,9 +14,5 @@ type Role struct {
 
 type RoleParam struct {
 	Name 		string		`form:"name"`
-	Price 		float64		`form:"price"`
-	Remark 		string		`form:"remark"`
-	Number		int			`form:"number"`
-	Purchase	int			`form:"purchase"`
-	TypeId		string		`form:"typeId"`
+	MenuIds		[]string	`form:"menuIds"`
 }

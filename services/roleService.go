@@ -7,7 +7,7 @@ import (
 	"github.com/jinzhu/gorm"
 )
 
-func GetRole(info models.PageInfo) (models.RoleResult) {
+func GetRoles(info models.PageInfo) (models.RoleResult) {
 
 	var result models.RoleResult
 
@@ -57,7 +57,7 @@ func GetRole(info models.PageInfo) (models.RoleResult) {
 		result.Roles = append(result.Roles, temp)
 	}
 
-	db.Table("TB_USER").Count(&result.Total)
+	db.Table("TB_ROLE").Count(&result.Total)
 
 	return result
 }
@@ -66,14 +66,151 @@ func DeleteRole(id string) models.Result{
 	var result models.Result
 
 	db, _ := mysql.GetConn()
-	err := db.Table("TB_USER").Where(" ID = ? ", id).Delete(&result).Error
+	db.Begin()
+
+	err := db.Table("TB_ROLE").Where(" ID = ? ", id).Delete(&result).Error
 	if err != nil {
+		db.Rollback()
 		result.Success = false
 		result.Message = "删除失败"
 		return result
 	}
 
+	err = db.Table("TB_ROLE_MENU").Where(" ROLE_ID = ? ", id).Delete(&result).Error
+	if err != nil {
+		db.Rollback()
+		result.Success = false
+		result.Message = "删除失败"
+		return result
+	}
+
+	db.Commit()
 	result.Success = true
 	result.Message = "删除成功"
+	return result
+}
+
+func SaveRole(info models.RoleParam) models.Result{
+	var result models.Result
+
+	var role modelDB.SaveRole
+	role.Id = mysql.GetId()
+	role.Name = info.Name
+
+	db, _ := mysql.GetConn()
+	err := db.Table("TB_ROLE").Save(&role).Error
+	if err != nil {
+		result.Success = false
+		result.Message = "保存失败"
+		return result
+	}
+
+	for _, menuId := range info.MenuIds {
+		var roleMenu modelDB.SaveRoleMenu
+		roleMenu.Id = mysql.GetId()
+		roleMenu.RoleId = role.Id
+		roleMenu.MenuId = menuId
+		err = db.Table("TB_ROLE_MENU").Save(&roleMenu).Error
+		if err != nil {
+			result.Success = false
+			result.Message = "保存失败"
+			return result
+		}
+	}
+
+	result.Success = true
+	result.Message = "保存成功"
+	return result
+}
+
+func GetRole(id string) (models.Role) {
+
+	var result models.Role
+
+	db, _ := mysql.GetConn()
+
+	var role modelDB.RoleList
+
+	//sql := modelDB.GET_ROLE_LIST + " WHERE ID = ? "
+	//err := db.Raw(sql,id).Scan(&goods).Error
+	err := db.Table("TB_ROLE").Where(" ID = ? ",id).Scan(&role).Error
+	if err != nil && err != gorm.ErrRecordNotFound {
+		//result.Success = false
+		//result.Message = "数据库异常"
+		return result
+	}
+	if err == gorm.ErrRecordNotFound {
+		//result.Success = false
+		//result.Message = "当前用户无权限"
+		return result
+	}
+
+	result.Id = role.Id
+	result.Name = role.Name
+	return result
+}
+
+func EditRole(id string, roleInfo map[string]interface{}, menuIds []string) models.Result{
+	var result models.Result
+
+	db, _ := mysql.GetConn()
+	db.Begin()
+
+	err := db.Table("TB_ROLE").Where(" ID = ? ", id).Update(roleInfo).Error
+	if err != nil {
+		db.Rollback()
+		result.Success = false
+		result.Message = "修改失败"
+		return result
+	}
+
+	err = db.Table("TB_ROLE_MENU").Where(" ROLE_ID = ? ", id).Delete(&result).Error
+	if err != nil {
+		db.Rollback()
+		result.Success = false
+		result.Message = "修改失败"
+		return result
+	}
+
+	for _, menuId := range menuIds {
+		var roleMenu modelDB.SaveRoleMenu
+		roleMenu.Id = mysql.GetId()
+		roleMenu.RoleId = id
+		roleMenu.MenuId = menuId
+		err = db.Table("TB_ROLE_MENU").Save(&roleMenu).Error
+		if err != nil {
+			db.Rollback()
+			result.Success = false
+			result.Message = "保存失败"
+			return result
+		}
+	}
+
+
+	result.Success = true
+	result.Message = "修改成功"
+	db.Commit()
+	return result
+}
+
+func Role() ([]models.Role) {
+
+	var result []models.Role
+
+	db, _ := mysql.GetConn()
+
+	var roles []modelDB.RoleList
+	err := db.Table("TB_ROLE").Scan(&roles).Error
+	if err != nil && err != gorm.ErrRecordNotFound {
+		return nil
+	}
+
+	for _, role := range roles {
+		var r models.Role
+		r.Id = role.Id
+		r.Name = role.Name
+		result = append(result, r)
+	}
+
 	return result
 }

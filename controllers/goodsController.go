@@ -39,7 +39,7 @@ func (g *GoodsController) GetGoods() {
 // @Success 200 {object} []models.Result "返回结果"
 // @Failure 400 {object} []models.Result "返回结果"
 // @router /saveEditId [POST]
-func (g *GoodsController) SaveEditId() {
+func (g *GoodsController) SaveEditGoodsId() {
 	var reply models.Result
 
 	in := models.IdParam{}
