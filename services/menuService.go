@@ -38,7 +38,7 @@ func MenuByUser(userId string) (models.MenuResult) {
 
 
 	menus := make([]modelDB.Menu, 0)
-	err = db.Table("TB_MENU").Where(" PARENT_ID = ? OR ID IN (?) ", "",menuIds).Scan(&menus).Error
+	err = db.Table("TB_MENU").Where(" PARENT_ID = ? OR ID IN (?) ", "",menuIds).Order("ID").Scan(&menus).Error
 	if err != nil && err != gorm.ErrRecordNotFound {
 		result.Success = false
 		result.Message = "数据库异常"
@@ -86,7 +86,7 @@ func MenuChild() ([]models.Menu) {
 	db, _ := mysql.GetConn()
 
 	var menus []modelDB.Menu
-	err := db.Table("TB_MENU").Where(" PARENT_ID != ? ", "").Scan(&menus).Error
+	err := db.Table("TB_MENU").Where(" PARENT_ID != ? ", "").Order("ID").Scan(&menus).Error
 	if err != nil && err != gorm.ErrRecordNotFound {
 		return nil
 	}

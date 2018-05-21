@@ -1,43 +1,39 @@
 <div style="text-align: center; margin-top: 3%">
-    <form id="goodsSaveForm" method="post" enctype="multipart/form-data">
-        <div style="margin-top: 1%">
-            商&nbsp;品&nbsp;名
+    <form id="userSaveForm" method="post" enctype="multipart/form-data">
+        <div style="margin-top: 1%;">
+            姓&nbsp;&nbsp;&nbsp;&nbsp;名
             <input name="name" class="easyui-textbox" data-options="required:true"/>
         </div>
         <div style="margin-top: 1%;">
-            价&nbsp;&nbsp;&nbsp;&nbsp;格
-            <input name="price" class="easyui-textbox" data-options="required:true"/>
+            手&nbsp;机&nbsp;号
+            <input name="phone" class="easyui-textbox" data-options="required:true"/>
         </div>
         <div style="margin-top: 1%;">
-            数&nbsp;&nbsp;&nbsp;&nbsp;量
-            <input name="number" class="easyui-textbox" data-options="required:true"/>
+            密&nbsp;&nbsp;&nbsp;&nbsp;码
+            <input name="password" class="easyui-textbox" data-options="required:true"/>
         </div>
         <div style="margin-top: 1%;">
-            提示数量
-            <input name="purchase" class="easyui-textbox" data-options="required:true"/>
+            状&nbsp;&nbsp;&nbsp;&nbsp;态
+            <select class="easyui-combobox" name="status" style="width: 15%;">
+                <option value="1">在职</option>
+                <option value="2">离职</option>
+            </select>
         </div>
         <div style="margin-top: 1%">
-            分类
-            <input name="typeId"
+            职&nbsp;&nbsp;&nbsp;&nbsp;位
+            <input name="roleIds"
                    class="easyui-combobox"
-                   style="width: 15%"
+                   style="width: 30%"
                    data-options="
-                                url:'/hyl/type',
+                                url:'/hyl/role',
                                 method:'get',
                                 valueField:'id',
                                 textField:'name',
+                                multiple:true,
                                 panelHeight:'auto',
                                 onSelect: function(rec){
                                     }
 			        ">
-        </div>
-        <div style="margin-top: 1%;">
-            描述
-            <input class="easyui-textbox" name="remark" data-options="required:true"><br/>
-        </div>
-        <div style="margin-top: 1%">
-            选择图片
-            <input class="easyui-filebox" name="multipartFile" style="width: 23%">
         </div>
 
     </form>

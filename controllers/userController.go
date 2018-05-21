@@ -6,6 +6,9 @@ import (
 	"storeManage/models"
 	"storeManage/services"
 	"storeManage/modelDB"
+	"math/rand"
+	"strconv"
+	"storeManage/common/db"
 )
 
 type UserController struct {
@@ -176,6 +179,103 @@ func (g *UserController) EditUser() {
 	roleInfo["STATUS"] = in.Status
 
 	reply = services.EditUser(userId.(string), roleInfo, in.RoleIds)
+
+	g.Ctx.Output.Status = 200
+	g.Data["json"] = reply
+	g.ServeJSON()
+}
+
+// @Title SaveUser
+// @Description 添加用户
+// @Success 200 {object} models.Result "返回结果"
+// @Failure 400 {object} models.Result "返回结果"
+// @router /save [POST]
+func (r *UserController) SaveUser() {
+	var reply models.Result
+
+	in := models.UserParam{}
+	r.ParseForm(&in)
+
+	reply = services.SaveUser(in)
+
+	r.Ctx.Output.Status = 200
+	r.Data["json"] = reply
+	r.ServeJSON()
+}
+
+// @Title Me
+// @Description 获取用户
+// @Param body body Page true "分页"
+// @Success 200 {object} models.GoodsResult "返回结果"
+// @Failure 400 {object} models.GoodsResult "返回结果"
+// @router /queryMe [POST]
+func (u *UserController) Me() {
+	//var reply []models.Goods
+	var reply []models.User
+
+	user := u.GetSession("user")
+	use := user.(modelDB.User)
+	fmt.Print("获取个人信息",use)
+
+	temp := services.GetMe(use.Id)
+	reply = append(reply, temp)
+	u.Ctx.Output.Status = 200
+	u.Data["json"] = reply
+	u.ServeJSON()
+}
+
+// @router /getEditMe [GET]
+func (u *UserController) GetMe() {
+	var reply models.User
+
+	user := u.GetSession("user")
+	use := user.(modelDB.User)
+	fmt.Print("获取菜单",use)
+
+	reply = services.GetMe(use.Id)
+
+	v1 := rand.Intn(8)
+	v2 := rand.Intn(9)
+	v3 := rand.Intn(9)
+	v4 := rand.Intn(9)
+	validate := strconv.Itoa(v1 + 1) + strconv.Itoa(v2) + strconv.Itoa(v3) + strconv.Itoa(v4)
+	u.SetSession("validate", validate)
+	mysql.Send(reply.Phone, validate)
+
+	u.Ctx.Output.Status = 200
+	u.Data["json"] = reply
+	u.ServeJSON()
+}
+
+// @Title EditRole
+// @Description 修改角色信息
+// @Success 200 {object} models.Result "返回结果"
+// @Failure 400 {object} models.Result "返回结果"
+// @router /editMe [POST]
+func (g *UserController) EditMe() {
+	var reply models.Result
+
+	in := models.MeParam{}
+	g.ParseForm(&in)
+
+	validate := g.GetSession("validate")
+	if in.Validate != validate.(string) {
+		g.Ctx.Output.Status = 200
+		reply.Success = false
+		reply.Message = "验证码错误"
+		g.Data["json"] = reply
+		g.ServeJSON()
+		return
+	}
+
+	roleInfo :=  make(map[string]interface{})
+	roleInfo["PHONE"] = in.Phone
+	roleInfo["PASSWORD"] = mysql.GetMd5String(in.Password)
+
+	user := g.GetSession("user")
+	use := user.(modelDB.User)
+
+	reply = services.EditMe(use.Id, roleInfo)
 
 	g.Ctx.Output.Status = 200
 	g.Data["json"] = reply

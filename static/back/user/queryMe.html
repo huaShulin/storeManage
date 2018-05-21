@@ -1,0 +1,83 @@
+<script type="text/javascript">
+
+    $(function () {
+        $("#meDatagrid").datagrid({
+            fit:true,
+            fitColumns:false,
+            pagination:true,
+            pageList:[2,3,5,10],
+            pageNumber:1,
+            pageSize:5,
+            url:'/hyl/user/queryMe',
+            columns:[[
+                {title:'姓名',field:'name',width:150,align:'center'},
+                {title:'职位',field:'role',width:300,align:'center'},
+                {title:'手机号',field:'phone',width:100,align:'center'},
+                {title:'状态',field:'status',width:100,align:'center'},
+                {title:'操作',field:'options',width:300,align:'center'
+                    ,formatter:function (value,row,index) {
+                        return "<a class='option' data-options=\"plain:true,iconCls:'icon-photo_edit'\" onclick=\"openMeEdit('"+ row.id +"')\">修改</a>"
+
+                    }
+                }
+            ]],
+            onLoadSuccess:function () {
+                $(".option").linkbutton();
+            },
+        });
+    });
+
+    //update
+    function meEdit() {
+        $('#meEditForm').form('submit', {
+            url:'/hyl/user/editMe',
+            onSubmit: function(user){
+                return $('#meEditForm').form('validate');
+            },
+            success:function(data){
+                var data = eval('(' + data + ')');
+                if (data.success){
+                    //var tab = $tabs.tabs('getSelected');
+                    //tab.panel('refresh');
+                    $("#meDatagrid").datagrid('reload');
+                    $('#openMeEdit').dialog('close',true);
+                } else {
+                    alert(data.message)
+                }
+            }
+        });
+    }
+    //Open Update dialog
+    function openMeEdit(id) {
+        //友情提醒
+        $.messager.confirm('提示','确定要修改密码或手机号?',function(r){
+            if(r){
+                $("#openMeEdit").dialog({
+                    top:200,
+                    width:700,
+                    title:"修改个人信息",
+                    iconCls:'icon-man',
+                    href:'/static/back/user/editMe.html',
+                    buttons:[{
+                        text:'保存',
+                        iconCls:'icon-save',
+                        handler:meEdit
+                    },{
+                        text:'关闭',
+                        iconCls:'icon-cancel',
+                        handler:function () {
+                            $("#openMeEdit").dialog('close',true);
+                        }
+                    }]
+                });
+            }
+        });
+    }
+
+</script>
+
+<!--datagrid-->
+<table id="meDatagrid"></table>
+
+<%--用户修改对话框--%>
+<div id="openMeEdit"></div>
