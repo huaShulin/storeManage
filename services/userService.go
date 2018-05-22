@@ -214,3 +214,113 @@ func EditUser(id string, roleInfo map[string]interface{}, roleIds []string) mode
 	db.Commit()
 	return result
 }
+
+func SaveUser(info models.UserParam) models.Result{
+	var result models.Result
+
+	var user modelDB.SaveUser
+	user.Id = mysql.GetId()
+	user.Name = info.Name
+	user.Phone = info.Phone
+	user.Status = info.Status
+	user.Password = mysql.GetMd5String(info.Password)
+
+	db, _ := mysql.GetConn()
+	err := db.Table("TB_USER").Save(&user).Error
+	if err != nil {
+		result.Success = false
+		result.Message = "保存失败"
+		return result
+	}
+
+	for _, roleId := range info.RoleIds {
+		var userRole modelDB.SaveUserRole
+		userRole.Id = mysql.GetId()
+		userRole.UserId = user.Id
+		userRole.RoleId = roleId
+		err = db.Table("TB_USER_ROLE").Save(&userRole).Error
+		if err != nil {
+			result.Success = false
+			result.Message = "保存失败"
+			return result
+		}
+	}
+
+	result.Success = true
+	result.Message = "保存成功"
+	return result
+}
+
+func GetMe(id string) (models.User) {
+
+	var result models.User
+
+	db, _ := mysql.GetConn()
+
+	var user modelDB.UserList
+	err := db.Table("TB_USER").Where(" ID = ? ",id).Scan(&user).Error
+	if err != nil && err != gorm.ErrRecordNotFound {
+		//result.Success = false
+		//result.Message = "数据库异常"
+		return result
+	}
+	if err == gorm.ErrRecordNotFound {
+		//result.Success = false
+		//result.Message = "当前用户无权限"
+		return result
+	}
+
+	var temp models.User
+	temp.Id = user.Id
+	temp.Name = user.Name
+	temp.Phone = user.Phone
+	if user.Status == 1 {
+		temp.Status = "在职"
+	} else {
+		temp.Status = "离职"
+	}
+
+	var userRoles []modelDB.ResultIds
+	err = db.Table("TB_USER_ROLE").Where(" USER_ID = ? ", user.Id).Scan(&userRoles).Error
+	if err != nil && err != gorm.ErrRecordNotFound {
+		return result
+	}
+	var ids []string
+	for _, userRole := range userRoles {
+		ids = append(ids, userRole.RoleId)
+	}
+	var roles []modelDB.RoleList
+	err = db.Table("TB_ROLE").Where(" ID IN (?) ", ids).Scan(&roles).Error
+	if err != nil && err != gorm.ErrRecordNotFound {
+		return result
+	}
+	for i, role := range roles {
+		if i != 0 {
+			temp.Role += ","
+		}
+		temp.Role += role.Name
+	}
+	result = temp
+
+	return result
+}
+
+func EditMe(id string, roleInfo map[string]interface{}) models.Result{
+	var result models.Result
+
+	db, _ := mysql.GetConn()
+	db.Begin()
+
+	err := db.Table("TB_USER").Where(" ID = ? ", id).Update(roleInfo).Error
+	if err != nil {
+		db.Rollback()
+		result.Success = false
+		result.Message = "修改失败"
+		return result
+	}
+
+	result.Success = true
+	result.Message = "修改成功"
+	db.Commit()
+	return result
+}

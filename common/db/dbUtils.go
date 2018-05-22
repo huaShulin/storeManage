@@ -9,6 +9,8 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
+	dayu "github.com/holdno/alidayu"
+	"fmt"
 )
 
 //获取数据库连接
@@ -40,4 +42,26 @@ func GetId() string {
 		return ""
 	}
 	return GetMd5String(base64.URLEncoding.EncodeToString(b))
+}
+
+//发送短信
+func Send(phone, validate string) {
+	userInput := &dayu.UserParams{
+		//AccessKeyId:   "阿里云的AccessKeyId",
+		AccessKeyId:   "LTAIWF2peUpfIZCY",
+		//AppSecret:     "阿里云的AppSecret",
+		AppSecret:     "lyUXM1FXtIDeejNKirTydRHs9b3Cys",
+		PhoneNumbers:  phone,
+		SignName:      "桦树林",
+		TemplateCode:  "SMS_109525111",
+		// 模板变量赋值，一定是json格式，注意转义
+		TemplateParam: "{\"code\": \"" + validate + "\"}",
+	}
+	ok, msg, err := dayu.SendMessage(userInput)
+	if ok {
+		fmt.Println("短信发送成功")
+	} else {
+		// 根据业务进行错误处理
+		fmt.Println(msg, err)
+	}
 }

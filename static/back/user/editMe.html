@@ -1,0 +1,31 @@
+
+<script>
+    $(function(){
+        $("#meEditForm").form('load','/hyl/user/getEditMe');
+    });
+
+</script>
+<div style="text-align: center;">
+    <form id="meEditForm" method="post">
+        <div style="margin-top: 1%;">
+            姓&nbsp;&nbsp;&nbsp;&nbsp;名
+            <input name="name" class="easyui-textbox" data-options="required:true" readonly/>
+        </div>
+        <div style="margin-top: 1%;">
+            手&nbsp;机&nbsp;号
+            <input name="phone" class="easyui-textbox" data-options="required:true"/>
+        </div>
+        <div style="margin-top: 1%">
+            密&nbsp;&nbsp;&nbsp;&nbsp;码
+            <input name="password" class="easyui-textbox" type="password"/>
+        </div>
+        <div style="margin-top: 1%;">
+            验&nbsp;证&nbsp;码
+            <input name="validate" class="easyui-textbox" data-options="required:true"/>
+        </div>
+        <!--<div style="margin-top: 1%">
+            选择图片
+            <input class="easyui-filebox" name="multipartFile" style="width: 23%">
+        </div>-->
+    </form>
+</div>

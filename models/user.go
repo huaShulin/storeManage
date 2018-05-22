@@ -21,6 +21,13 @@ type User struct {
 type UserParam struct {
 	Name 		string		`form:"name"`
 	Phone 		string		`form:"phone"`
+	Password	string		`form:"password"`
 	Status		int			`form:"status"`
 	RoleIds		[]string	`form:"roleIds"`
+}
+
+type MeParam struct {
+	Phone 		string		`form:"phone"`
+	Password	string		`form:"password"`
+	Validate	string		`form:"validate"`
 }
