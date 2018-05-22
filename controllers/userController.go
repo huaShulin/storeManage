@@ -270,7 +270,9 @@ func (g *UserController) EditMe() {
 
 	roleInfo :=  make(map[string]interface{})
 	roleInfo["PHONE"] = in.Phone
-	roleInfo["PASSWORD"] = mysql.GetMd5String(in.Password)
+	if in.Password != "" {
+		roleInfo["PASSWORD"] = mysql.GetMd5String(in.Password)
+	}
 
 	user := g.GetSession("user")
 	use := user.(modelDB.User)
