@@ -21,6 +21,16 @@ func (m *MenuController) GetMenu() {
 	var reply models.MenuResult
 
 	user := m.GetSession("user")
+
+	if user == nil {
+		m.Ctx.Output.Status = 200
+		reply.Success = false
+		reply.Message = "用户未登录"
+		m.Data["json"] = reply
+		m.ServeJSON()
+		return
+	}
+
 	use := user.(modelDB.User)
 	fmt.Print("获取菜单",use)
 

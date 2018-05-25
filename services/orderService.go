@@ -35,7 +35,9 @@ func GetOrder(info models.PageInfo) models.OrderResult {
 		temp.UserId = order.UserId
 		temp.UserName = order.UserName
 		temp.Sum = order.Sum
-		temp.Time = order.Time
+		//temp.Time = order.Time
+		t, _ := time.ParseInLocation("20060102150405", order.Time, time.Local)
+		temp.Time = t.Format("2006-01-02 15:04:05")
 		result.Order = append(result.Order, temp)
 
 		/*

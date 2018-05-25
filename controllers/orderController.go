@@ -5,6 +5,7 @@ import (
 	"storeManage/models"
 	"storeManage/services"
 	"fmt"
+	"storeManage/modelDB"
 )
 
 type OrderController struct {
@@ -41,10 +42,11 @@ func (o *OrderController) CreateOrder() {
 	var reply models.Result
 
 	orderGoodsSession := o.GetSession("orderGoodsList")
-	userId := o.GetSession("id").(string)
+	user := o.GetSession("user")
+	use := user.(modelDB.User)
 	if orderGoodsSession != nil {
 		orderGoodsList := orderGoodsSession.(map[string]int)
-		reply = services.CreateOrder(userId, orderGoodsList)
+		reply = services.CreateOrder(use.Id, orderGoodsList)
 	}
 
 	if reply.Success {

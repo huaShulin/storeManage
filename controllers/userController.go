@@ -50,7 +50,6 @@ func (u *UserController) Login() {
 
 	if reply.Success {
 		u.SetSession("user", user)
-		fmt.Println(u.GetSession("id"))
 	}
 
 	u.Ctx.Output.Status = 200
