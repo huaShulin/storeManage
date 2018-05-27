@@ -5,6 +5,7 @@ import (
 	"storeManage/common/db"
 	"github.com/jinzhu/gorm"
 	"storeManage/modelDB"
+	"fmt"
 )
 
 func Type() ([]models.Type) {
@@ -62,6 +63,10 @@ func GetTypes(info models.PageInfo) models.TypePageResult {
 		var temp models.TypePage
 		temp.Id = typ.Id
 		temp.Name = typ.Name
+		//var typeNumber modelDB.ResultNumber
+		var number int
+		db.Table("TB_GOODS").Where(" TYPE_ID = ? ", typ.Id).Count(&number)
+		temp.Number = number
 		temp.Parent = typ.Parent
 		result.TypePages = append(result.TypePages, temp)
 	}
@@ -137,10 +142,27 @@ func DeleteType(id string) models.Result{
 	var result models.Result
 
 	db, _ := mysql.GetConn()
+
+	var count int
+	db.Table("TB_GOODS").Where(" TYPE_ID = ? ", id).Count(&count)
+	if count != 0 {
+		result.Success = false
+		result.Message = "删除失败，该分类已有商品"
+		return result
+	}
+
+	db.Table("TB_TYPE").Where(" PARENT_ID = ? ", id).Count(&count)
+	fmt.Printf("count :", count)
+	if count != 0 {
+		result.Success = false
+		result.Message = "删除失败，该分类还有子分类"
+		return result
+	}
+
 	err := db.Table("TB_TYPE").Where(" ID = ? ", id).Delete(&result).Error
 	if err != nil {
 		result.Success = false
-		result.Message = "删除失败"
+		result.Message = "删除失败，数据库异常"
 		return result
 	}
 

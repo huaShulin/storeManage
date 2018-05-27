@@ -8,6 +8,14 @@
     <script type="text/javascript" src="/static/back/easyui/js/easyui-lang-zh_CN.js"></script>
     <script type="text/javascript">
         $(function () {
+
+            $("#msg").click(function () {
+                let phone=$("#phone").val();
+                $.post('/hyl/user/getMsg', {"phone":phone},function(data){
+                    alert(data.message)
+                }, 'json');
+            });
+
             $('#dd').dialog({
                 top: 270,
                 title: '小型店铺管理系统--登录',
@@ -19,7 +27,7 @@
             //提交
             $('#submit').bind('click', function(){
                 $('#form').form('submit', {
-                    url:'/hyl/user/login',
+                    url:'/hyl/user/messageLogin',
                     onSubmit: function(){
                         return $('#form').form('validate');
                     },
@@ -55,15 +63,15 @@
         $.extend($.fn.validatebox.defaults.rules, {
             password: {
                 validator: function(value, param){
-                    return /^[a-zA-Z0-9]{6,20}$/.test(value);
+                    return /^[0-9]{4}$/.test(value);
                 },
-                message: '密码由6到12位的字母或数字组成'
+                message: '验证码由4位数字组成'
             }
         });
 
     </script>
 </head>
-<body style="background-image:url(/static/back/files/background.jpg);background-size: 100%;">
+<body style="background-image:url(/static/back/files/background.jpg);">
 
 <div id="dd">
     <center>
@@ -75,7 +83,7 @@
                 <tr>
                     <td>手机号：</td>
                     <td>
-                        <input name="Phone"
+                        <input name="Phone" id="phone"
                                class="easyui-textbox"
                                data-options="iconCls:'icon-man'
                                         ,required:true
@@ -86,11 +94,11 @@
                     </td>
                 </tr>
                 <tr>
-                    <td>密码：</td>
+                    <td>验证码：</td>
                     <td>
                         <input id="password"
                                name="Password"
-                               class="easyui-passwordbox"
+                               class="easyui-textbox"
                                data-options="required:true
                                         ,validType:'password'
                                         ,missingMessage:'请输入6-20位字母或数字'"
@@ -111,7 +119,7 @@
                     <td style="text-align:right">
                         <a id="submit" class="easyui-linkbutton" >登录</a>
                         <a id="clear" class="easyui-linkbutton">重置</a>
-                        <a id="clear" href="messageLogin.html" class="easyui-linkbutton">忘记密码</a>
+                        <a id="msg" class="easyui-linkbutton">发送验证码</a>
                     </td>
                 </tr>
                 <tr>

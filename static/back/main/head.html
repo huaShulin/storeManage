@@ -1,7 +1,19 @@
-<div style="text-align: center"><h1>小型店铺管理系统 V1.0</h1></div>
+
+<script type="text/javascript">
+    $(function () {
+         $.post('/hyl/user/getLogin',  function(data){
+             let r=data.role;
+             let n=data.name;
+             $("#msg").text(r+" "+n);
+         }, 'json');
+    });
+</script>
+
+<div style="text-align: center"><h1>小型店铺管理系统 V1.3</h1></div>
 
 <div style="text-align: right">
     <h3>
-        欢迎 管理员
+        欢迎
+        <span id="msg"></span>
     </h3>
 </div>

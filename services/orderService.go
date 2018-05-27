@@ -38,6 +38,18 @@ func GetOrder(info models.PageInfo) models.OrderResult {
 		//temp.Time = order.Time
 		t, _ := time.ParseInLocation("20060102150405", order.Time, time.Local)
 		temp.Time = t.Format("2006-01-02 15:04:05")
+		temp.Remark = order.Remark
+
+		var orderGoodss []modelDB.OrderGoods
+		db.Table("TB_ORDER_GOODS").Where(" ORDER_ID = ? ",order.Id).Scan(&orderGoodss)
+		for i, orderGoods := range orderGoodss {
+			if i != 0 {
+				temp.Details += "；"
+			}
+			temp.Details += "商品名：" + orderGoods.Name + ",价格：" + strconv.FormatFloat(orderGoods.Price, 'f', -1, 64) +
+				"元,数量：" + strconv.Itoa(orderGoods.Number) + ",商品总价：" + strconv.FormatFloat(orderGoods.Sum, 'f', -1, 64) + "元"
+		}
+
 		result.Order = append(result.Order, temp)
 
 		/*
@@ -97,7 +109,7 @@ func GetNowOrder(info models.PageInfo,orderGoodss map[string]int) (models.OrderG
 	return result
 }
 
-func CreateOrder(userId string, orderGoodss map[string]int) (models.Result) {
+func CreateOrder(userId string, orderGoodss map[string]int, remark string) (models.Result) {
 	var result models.Result
 
 	db, _ := mysql.GetConn()
@@ -143,6 +155,7 @@ func CreateOrder(userId string, orderGoodss map[string]int) (models.Result) {
 	tempOrder.UserName = tempUser.Name
 	tempOrder.Sum = allSum
 	tempOrder.Time = time.Now().Format("20060102150405")
+	tempOrder.Remark = remark
 	db.Table("TB_ORDER").Save(&tempOrder)
 
 	db.Commit()

@@ -1,5 +1,12 @@
 package models
 
+type GetGoodsByField struct {
+	Page int `form:"page"`
+	Rows int `form:"rows"`
+	Field string `form:"field"`
+	Value string `form:"value"`
+}
+
 type GoodsResult struct {
 	Goods		[]Goods		`json:"rows"`
 	Total		int			`json:"total"`

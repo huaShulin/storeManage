@@ -8,6 +8,7 @@ type TypeResult struct {
 type Type struct {
 	Id 			string		`json:"id"`
 	Name 		string		`json:"name"`
+
 	ParentId 	string 		`json:"parentId"`
 }
 
@@ -19,6 +20,7 @@ type TypePageResult struct {
 type TypePage struct {
 	Id 			string		`json:"id"`
 	Name 		string		`json:"name"`
+	Number		int		`json:"number"`
 	Parent 		string 		`json:"parent"`
 }
 

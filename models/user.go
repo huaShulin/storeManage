@@ -5,6 +5,15 @@ type Login struct {
 	Password string	`json:"password"`
 }
 
+type SendMessage struct {
+	Phone string `form:"phone"`
+}
+
+type GetLgin struct {
+	Name string `json:"name"`
+	Role string `json:"role"`
+}
+
 type UserResult struct {
 	Users		[]User		`json:"rows"`
 	Total		int			`json:"total"`

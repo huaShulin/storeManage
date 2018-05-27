@@ -5,6 +5,10 @@ type OrderAddGoodsParam struct {
 	Number int `form:"number"`
 }
 
+type OrderRemarkParam struct {
+	Remark string `form:"remark"`
+}
+
 type OrderResult struct {
 	Order		[]Order		`json:"rows"`
 	Total		int			`json:"total"`
@@ -16,6 +20,8 @@ type Order struct {
 	UserId		string		`json:"userId"`
 	UserName	string		`json:"userName"`
 	Time		string		`json:"time"`
+	Remark		string		`json:"remark"`
+	Details		string		`json:"details"`
 }
 
 type OrderGoodsResult struct {

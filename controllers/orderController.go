@@ -41,12 +41,15 @@ func (o *OrderController) GetOrder() {
 func (o *OrderController) CreateOrder() {
 	var reply models.Result
 
+	in := models.OrderRemarkParam{}
+	o.ParseForm(&in)
+
 	orderGoodsSession := o.GetSession("orderGoodsList")
 	user := o.GetSession("user")
 	use := user.(modelDB.User)
 	if orderGoodsSession != nil {
 		orderGoodsList := orderGoodsSession.(map[string]int)
-		reply = services.CreateOrder(use.Id, orderGoodsList)
+		reply = services.CreateOrder(use.Id, orderGoodsList, in.Remark)
 	}
 
 	if reply.Success {

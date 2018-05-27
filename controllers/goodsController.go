@@ -33,6 +33,28 @@ func (g *GoodsController) GetGoods() {
 	g.ServeJSON()
 }
 
+// @Title Goods
+// @Description 根据条件获取商品
+// @Param body body Page true "分页"
+// @Success 200 {object} models.GoodsResult "返回结果"
+// @Failure 400 {object} models.GoodsResult "返回结果"
+// @router /queryGoodsByField [POST]
+func (g *GoodsController) GetGoodsByField() {
+	//var reply []models.Goods
+	var reply models.GoodsResult
+
+	in := models.GetGoodsByField{}
+	g.ParseForm(&in)
+
+	fmt.Println("PAGE:", in.Page)
+	fmt.Println("SIZE:", in.Rows)
+
+	reply = services.GetGoodsByField(in)
+	g.Ctx.Output.Status = 200
+	g.Data["json"] = reply
+	g.ServeJSON()
+}
+
 // @Title SaveEditId
 // @Description 获取修改商品ID
 // @Param body body models.SaveEditId true "修改商品ID"

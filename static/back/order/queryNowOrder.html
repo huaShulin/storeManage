@@ -12,11 +12,11 @@
             columns:[[
                 {title:'商品名',field:'name',width:150,align:'center'},
                 {title:'价格',field:'price',width:100,align:'center'},
-                {title:'图片',field:'src',width:100,align:'center',
+                /*{title:'图片',field:'src',width:100,align:'center',
                     formatter:function(value){
                         var src ="/static/"+value;
                         return  '<img src="'+src+'" style="height:30px">';
-                    }},
+                    }},*/
                 {title:'订单数量',field:'orderNumber',width:170,align:'center'},
                 {title:'库存总量',field:'number',width:170,align:'center'},
                 {title:'类别',field:'type',width:100,align:'center'},
@@ -29,7 +29,7 @@
             onLoadSuccess:function () {
                 $(".option").linkbutton();
             },
-            toolbar:'#goodsTools'
+            toolbar:'#nowOrderTools'
         });
     });
 
@@ -129,10 +129,10 @@
     function createOrder() {
         $.get('/hyl/order/getSum', function(data){
             //友情提醒
-            $.messager.confirm('加入订单','总价格为'+ data.message +"元，是否确定",function(r){
+            $.messager.prompt('加入订单','总价格为'+ data.message +"元，请输入备注信息",function(r){
                 if(r){
                     //发送ajax请求订单商品
-                    $.get('/hyl/order/create',function(result){
+                    $.get('/hyl/order/create?remark='+r,function(result){
                         var tab = $tabs.tabs('getSelected');
                         tab.panel('refresh');
                         $.messager.show({
@@ -154,7 +154,7 @@
 <table id="orderGoodsDatagrid"></table>
 
 <%--工具栏--%>
-<div id="goodsTools">
+<div id="nowOrderTools">
     <a class="easyui-linkbutton" onclick="createOrder();" data-options="iconCls:'icon-photo_add',plain:true">生成</a>
 </div>
 

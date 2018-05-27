@@ -100,6 +100,15 @@ func (g *TypeController) EditType() {
 	in := models.GoodsParam{}
 	g.ParseForm(&in)
 
+	if typeId == in.TypeId {
+		g.Ctx.Output.Status = 200
+		reply.Success = false
+		reply.Message = "父类不可为自身"
+		g.Data["json"] = reply
+		g.ServeJSON()
+		return
+	}
+
 	goodsInfo :=  make(map[string]interface{})
 	goodsInfo["NAME"] = in.Name
 	goodsInfo["PARENT_ID"] = in.TypeId
@@ -130,7 +139,7 @@ func (g *TypeController) SaveType() {
 }
 
 // @Title DeleteGoods
-// @Description 删除商品
+// @Description 删除分类
 // @Success 200 {object} models.Result "返回结果"
 // @Failure 400 {object} models.Result "返回结果"
 // @router /remove [POST]
@@ -143,8 +152,6 @@ func (g *TypeController) DeleteType() {
 	reply = services.DeleteType(in.Id)
 
 	g.Ctx.Output.Status = 200
-	reply.Success = true
-	reply.Message = "删除商品成功:ID=" + in.Id
 	g.Data["json"] = reply
 	g.ServeJSON()
 }

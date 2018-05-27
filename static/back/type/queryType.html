@@ -122,12 +122,12 @@
         $.messager.confirm('提示','确定要删除吗?',function(r){
             if(r){
                 //发送ajax请求删除商品
-                $.post('/hyl/type/remove',{"id":id},function(){
+                $.post('/hyl/type/remove',{"id":id},function(result){
                     var tab = $tabs.tabs('getSelected');
                     tab.panel('refresh');
                     $.messager.show({
                         title:'提示',
-                        msg:'类型删除成功...',
+                        msg:result.message,
                     });
                     //刷新datagrid
                     $("#dg").datagrid('reload');//始终保持在当前页展示

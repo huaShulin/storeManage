@@ -40,6 +40,33 @@ func Login(info models.Login) (models.Result, modelDB.User) {
 	return result, user
 }
 
+func MessageLogin(phone string) (models.Result, modelDB.User) {
+
+	var result models.Result
+
+	db, _ := mysql.GetConn()
+
+	var user modelDB.User
+	err := db.Table("TB_USER").Where(" PHONE = ? ", phone).Scan(&user).Error
+	if err != nil && err != gorm.ErrRecordNotFound {
+		result.Success = false
+		result.Message = "数据库异常"
+		return result, user
+	}
+	if err == gorm.ErrRecordNotFound {
+		result.Success = false
+		result.Message = "用户不存在"
+		return result, user
+	}
+
+	//存入session
+	//l.SetSession("user", user.Id)
+	//l.Data["Website"] = user.Id
+
+	result.Success = true
+	result.Message = "登陆成功"
+	return result, user
+}
 
 func GetUsers(info models.PageInfo) (models.UserResult) {
 

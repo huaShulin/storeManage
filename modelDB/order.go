@@ -1,7 +1,7 @@
 package modelDB
 
 const (
-	GET_ORDER_LIST = " SELECT ID,SUM,USER_ID,USER_NAME,TIME FROM TB_ORDER "
+	GET_ORDER_LIST = " SELECT ID,SUM,USER_ID,USER_NAME,TIME,REMARK FROM TB_ORDER "
 )
 
 type Order struct {
@@ -10,6 +10,7 @@ type Order struct {
 	UserId		string		`gorm:"column:USER_ID" json:"USER_ID"`
 	UserName	string		`gorm:"column:USER_NAME" json:"USER_NAME"`
 	Time		string		`gorm:"column:TIME" json:"TIME"`
+	Remark		string		`gorm:"column:REMARK" json:"REMARK"`
 }
 
 type OrderGoods struct {

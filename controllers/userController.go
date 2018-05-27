@@ -57,6 +57,106 @@ func (u *UserController) Login() {
 	u.ServeJSON()
 }
 
+// @Title MessageLogin
+// @Description 验证码登录
+// @Param body body models.Login true "登录结构体"
+// @Success 200 {object} models.Result "返回结果"
+// @Failure 400 {object} models.Result "返回结果"
+// @router /messageLogin [POST]
+func (u *UserController) MessageLogin() {
+	var reply models.Result
+
+	fmt.Println("Login")
+	login := models.Login{}
+	if err := u.ParseForm(&login); err != nil {
+		u.Ctx.Output.Status = 200
+		reply.Success = false
+		reply.Message = "输入参数不合法"
+		u.Data["json"] = reply
+		u.ServeJSON()
+		return
+	}
+
+	validate := u.GetSession(login.Phone)
+	if login.Password != validate.(string) {
+		u.Ctx.Output.Status = 200
+		reply.Success = false
+		reply.Message = "验证码错误"
+		u.Data["json"] = reply
+		u.ServeJSON()
+		return
+	}
+
+	var user modelDB.User
+	reply, user = services.MessageLogin(login.Phone)
+
+	if reply.Success {
+		u.SetSession("user", user)
+	}
+
+	u.Ctx.Output.Status = 200
+	u.Data["json"] = reply
+	u.ServeJSON()
+}
+
+// @router /getMsg [POST]
+func (u *UserController) GetMsg() {
+	var reply models.Result
+
+	send := models.SendMessage{}
+	if err := u.ParseForm(&send); err != nil {
+		u.Ctx.Output.Status = 200
+		reply.Success = false
+		reply.Message = "输入参数不合法"
+		u.Data["json"] = reply
+		u.ServeJSON()
+		return
+	}
+
+	v1 := rand.Intn(8)
+	v2 := rand.Intn(9)
+	v3 := rand.Intn(9)
+	v4 := rand.Intn(9)
+	validate := strconv.Itoa(v1 + 1) + strconv.Itoa(v2) + strconv.Itoa(v3) + strconv.Itoa(v4)
+	u.SetSession(send.Phone, validate)
+	mysql.Send(send.Phone, validate)
+	reply.Success = true
+	reply.Message = "验证码已发送"
+
+	u.Ctx.Output.Status = 200
+	u.Data["json"] = reply
+	u.ServeJSON()
+}
+
+// @Title GetLogin
+// @Description 获取登录信息
+// @Param body body models.Login true "登录结构体"
+// @Success 200 {object} models.Result "返回结果"
+// @Failure 400 {object} models.Result "返回结果"
+// @router /getLogin [POST]
+func (u *UserController) GetLogin() {
+	var reply models.GetLgin
+
+	fmt.Println("GetLgin")
+
+	user := u.GetSession("user")
+	use := user.(modelDB.User)
+
+	reply.Name = use.Name
+
+	roles := services.GetRolesByUserId(use.Id)
+	for i, role := range roles {
+		if i != 0 {
+			reply.Role += ","
+		}
+		reply.Role += role.Name
+	}
+
+	u.Ctx.Output.Status = 200
+	u.Data["json"] = reply
+	u.ServeJSON()
+}
+
 // @Title User
 // @Description 获取用户
 // @Param body body Page true "分页"

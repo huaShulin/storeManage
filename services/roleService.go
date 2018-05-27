@@ -214,3 +214,27 @@ func Role() ([]models.Role) {
 
 	return result
 }
+
+func GetRolesByUserId(id string) ([]modelDB.RoleList) {
+
+	var result []modelDB.RoleList
+
+	db, _ := mysql.GetConn()
+
+	var userRoles []modelDB.ResultIds
+	err := db.Table("TB_USER_ROLE").Where(" USER_ID = ? ", id).Scan(&userRoles).Error
+	if err != nil && err != gorm.ErrRecordNotFound {
+		return result
+	}
+	var ids []string
+	for _, userRole := range userRoles {
+		ids = append(ids, userRole.RoleId)
+	}
+
+	err = db.Table("TB_ROLE").Where(" ID IN (?) ", ids).Scan(&result).Error
+	if err != nil && err != gorm.ErrRecordNotFound {
+		return result
+	}
+
+	return result
+}

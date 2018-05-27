@@ -78,6 +78,49 @@ func GetGoods(id string) (models.Goods) {
 	return result
 }
 
+func GetGoodsByField(info models.GetGoodsByField) (models.GoodsResult) {
+
+	var result models.GoodsResult
+
+	db, _ := mysql.GetConn()
+
+	goodss := make([]modelDB.Goods, 0)
+
+	var page models.PageInfo
+	page.Rows = info.Rows
+	page.Page = info.Page
+
+	sql := "SELECT * FROM (" + modelDB.GET_GOODS_LIST + ") A WHERE INSTR(" + info.Field + ",?)" + PageSql(page)
+	err := db.Raw(sql, info.Value).Scan(&goodss).Error
+	if err != nil && err != gorm.ErrRecordNotFound {
+		//result.Success = false
+		//result.Message = "数据库异常"
+		return result
+	}
+	if err == gorm.ErrRecordNotFound {
+		//result.Success = false
+		//result.Message = "当前用户无权限"
+		return result
+	}
+
+	for _, goods := range goodss {
+		var temp models.Goods
+		temp.Id = goods.Id
+		temp.Name = goods.Name
+		temp.Price = goods.Price
+		temp.Src = goods.Src
+		temp.Remark = goods.Remark
+		temp.Number = goods.Number
+		temp.Purchase = goods.Purchase
+		temp.Type = goods.Type
+		result.Goods = append(result.Goods, temp)
+	}
+
+	db.Table("TB_GOODS").Where(" INSTR(" + info.Field + ",?) ", info.Value).Count(&result.Total)
+
+	return result
+}
+
 func EditGoods(id string, goodsInfo map[string]interface{}) models.Result{
 	var result models.Result
 

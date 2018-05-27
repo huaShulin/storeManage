@@ -5,26 +5,25 @@
             fit:true,
             fitColumns:false,
             pagination:true,
-            pageList:[2,3,5,10],
+            pageList:[2,3,5,10,15,20,30],
             pageNumber:1,
-            pageSize:5,
+            pageSize:10,
             url:'/hyl/goods/queryAll',
             columns:[[
                 {title:'商品名',field:'name',width:150,align:'center'},
                 {title:'价格',field:'price',width:100,align:'center'},
-                {title:'图片',field:'src',width:100,align:'center',
+                /*{title:'图片',field:'src',width:100,align:'center',
                     formatter:function(value){
                         var src ="/static/"+value;
                         return  '<img src="'+src+'" style="height:30px">';
-                    }},
+                    }},*/
                 {title:'描述',field:'remark',width:130,align:'center'},
                 {title:'剩余数量',field:'number',width:70,align:'center'},
                 {title:'提示进货数量',field:'purchase',width:70,align:'center'},
                 {title:'类别',field:'type',width:100,align:'center'},
                 {title:'操作',field:'options',width:300,align:'center'
                     ,formatter:function (value,row,index) {
-                        return "<a class='option' data-options=\"plain:true,iconCls:'icon-photo'\" onclick=\"goodsInline('"+ row.src +"')\">预览</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"+
-                                "<a class='option' data-options=\"plain:true,iconCls:'icon-photo_edit'\" onclick=\"goodsJoin('"+ row.id +"')\">加入订单</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"+
+                        return "<a class='option' data-options=\"plain:true,iconCls:'icon-photo_edit'\" onclick=\"goodsJoin('"+ row.id +"')\">加入订单</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"+
                                 "<a class='option' data-options=\"plain:true,iconCls:'icon-photo_edit'\" onclick=\"openGoodsEdit('"+ row.id +"')\">修改</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"+
                                 "<a class='option' data-options=\"plain:true,iconCls:'icon-photo_edit'\" onclick=\"goodsDelete('"+ row.id +"')\">删除</a>"
                     }
@@ -190,6 +189,18 @@
         });
     }
 
+    //处理搜索
+    function search(value,name) {
+
+        $("#goodsDatagrid").datagrid({
+            url:"/hyl/goods/queryGoodsByField",
+            queryParams: {
+                field:name,
+                value:value
+            }
+        });
+    }
+
     
 </script>
 
@@ -199,7 +210,15 @@
 <%--工具栏--%>
 <div id="goodsTools">
     <a class="easyui-linkbutton" onclick="openGoodsSave();" data-options="iconCls:'icon-photo_add',plain:true">添加</a>
-</div>
+    <!--搜索框-->
+    <input id="search" class="easyui-searchbox" data-options="searcher:search,prompt:'请输入查询条件',menu:'#condition',width:400"></div>
+    <!--搜索框条件-->
+    <div id="condition" style="height: auto">
+        <!--<div data-options="name:'id'">id</div>-->
+        <div data-options="name:'NAME'">商品名</div>
+        <div data-options="name:'REMARK'">描述</div>
+        <div data-options="name:'TYPE'">类别</div>
+    </div>
 
 <%--用户保存对话框--%>
 <div id="openGoodsSave"></div>
