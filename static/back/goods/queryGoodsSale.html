@@ -23,15 +23,10 @@
                 {title:'类别',field:'type',width:100,align:'center'},
                 {title:'操作',field:'options',width:300,align:'center'
                     ,formatter:function (value,row,index) {
-                        return "<a class='option' data-options=\"plain:true,iconCls:'icon-photo_edit'\" onclick=\"openGoodsEdit('"+ row.id +"')\">修改</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"+
-                                "<a class='option' data-options=\"plain:true,iconCls:'icon-photo_edit'\" onclick=\"goodsDelete('"+ row.id +"')\">删除</a>"
+                        return "<a class='option' data-options=\"plain:true,iconCls:'icon-photo_edit'\" onclick=\"goodsJoin('"+ row.id +"')\">加入订单</a>"
                     }
                 }
             ]],
-            onLoadSuccess:function () {
-                $(".option").linkbutton();
-            },
-            toolbar:'#goodsTools'
         });
     });
 

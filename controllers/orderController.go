@@ -35,6 +35,31 @@ func (o *OrderController) GetOrder() {
 	o.ServeJSON()
 }
 
+// @Title Order
+// @Description 获取我的订单
+// @Param body body Page true "分页"
+// @Success 200 {object} models.OrderResult "返回结果"
+// @Failure 400 {object} models.OrderResult "返回结果"
+// @router /me [POST]
+func (o *OrderController) GetMeOrder() {
+	//var reply []models.Goods
+	var reply models.OrderResult
+
+	user := o.GetSession("user")
+	use := user.(modelDB.User)
+
+	in := models.PageInfo{}
+	o.ParseForm(&in)
+
+	fmt.Println("PAGE:", in.Page)
+	fmt.Println("SIZE:", in.Rows)
+
+	reply = services.GetMeOrder(in, use.Id)
+
+	o.Ctx.Output.Status = 200
+	o.Data["json"] = reply
+	o.ServeJSON()
+}
 
 //生成订单
 // @router /create [GET]

@@ -113,6 +113,14 @@ func init() {
 
 	beego.GlobalControllerRouter["storeManage/controllers:OrderController"] = append(beego.GlobalControllerRouter["storeManage/controllers:OrderController"],
 		beego.ControllerComments{
+			Method: "GetMeOrder",
+			Router: `/me`,
+			AllowHTTPMethods: []string{"POST"},
+			MethodParams: param.Make(),
+			Params: nil})
+
+	beego.GlobalControllerRouter["storeManage/controllers:OrderController"] = append(beego.GlobalControllerRouter["storeManage/controllers:OrderController"],
+		beego.ControllerComments{
 			Method: "GetNowOrder",
 			Router: `/nowOrder`,
 			AllowHTTPMethods: []string{"POST"},

@@ -90,7 +90,16 @@ func (u *UserController) MessageLogin() {
 	var user modelDB.User
 	reply, user = services.MessageLogin(login.Phone)
 
+
 	if reply.Success {
+		if user.Status != 1 {
+			u.Ctx.Output.Status = 200
+			reply.Success = false
+			reply.Message = "该用户已离职"
+			u.Data["json"] = reply
+			u.ServeJSON()
+			return
+		}
 		u.SetSession("user", user)
 	}
 
@@ -275,7 +284,6 @@ func (g *UserController) EditUser() {
 	roleInfo :=  make(map[string]interface{})
 	roleInfo["NAME"] = in.Name
 	roleInfo["PHONE"] = in.Phone
-	roleInfo["STATUS"] = in.Status
 
 	reply = services.EditUser(userId.(string), roleInfo, in.RoleIds)
 

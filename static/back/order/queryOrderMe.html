@@ -1,14 +1,14 @@
 <script type="text/javascript">
 
     $(function () {
-        $("#orderDatagrid").datagrid({
+        $("#orderMeDatagrid").datagrid({
             fit:true,
             fitColumns:false,
             pagination:true,
             pageList:[2,3,5,10,20,30],
             pageNumber:1,
             pageSize:20,
-            url:'/hyl/order',
+            url:'/hyl/order/me',
             columns:[[
                 {title:'订单号',field:'id',width:150,align:'center'},
                 {title:'销售人',field:'userName',width:150,align:'center'},
@@ -23,4 +23,4 @@
 </script>
 
 <!--datagrid-->
-<table id="orderDatagrid"></table>
+<table id="orderMeDatagrid"></table>

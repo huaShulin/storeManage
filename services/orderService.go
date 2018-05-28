@@ -46,8 +46,62 @@ func GetOrder(info models.PageInfo) models.OrderResult {
 			if i != 0 {
 				temp.Details += "；"
 			}
-			temp.Details += "商品名：" + orderGoods.Name + ",价格：" + strconv.FormatFloat(orderGoods.Price, 'f', -1, 64) +
-				"元,数量：" + strconv.Itoa(orderGoods.Number) + ",商品总价：" + strconv.FormatFloat(orderGoods.Sum, 'f', -1, 64) + "元"
+			temp.Details += "商品名：" + orderGoods.Name + "，价格：" + strconv.FormatFloat(orderGoods.Price, 'f', -1, 64) +
+				"元，数量：" + strconv.Itoa(orderGoods.Number) + "，商品总价：" + strconv.FormatFloat(orderGoods.Sum, 'f', -1, 64) + "元"
+		}
+
+		result.Order = append(result.Order, temp)
+
+		/*
+		goodsInfo :=  make(map[string]interface{})
+		goodsInfo["NUMBER"] = goods.Number - temp.Number
+		*/
+	}
+
+	db.Table("TB_ORDER").Count(&result.Total)
+
+	return result
+}
+
+func GetMeOrder(info models.PageInfo, userId string) models.OrderResult {
+
+	var result models.OrderResult
+
+	db, _ := mysql.GetConn()
+
+	sql := modelDB.GET_ORDER_LIST + " WHERE USER_ID = ? " + PageSql(info)
+	orders := make([]modelDB.Order, 0)
+	err := db.Raw(sql, userId).Scan(&orders).Error
+	if err != nil && err != gorm.ErrRecordNotFound {
+		//result.Success = false
+		//result.Message = "数据库异常"
+		return result
+	}
+	if err == gorm.ErrRecordNotFound {
+		//result.Success = false
+		//result.Message = "当前用户无权限"
+		return result
+	}
+
+	for _, order := range orders {
+		var temp models.Order
+		temp.Id = order.Id
+		temp.UserId = order.UserId
+		temp.UserName = order.UserName
+		temp.Sum = order.Sum
+		//temp.Time = order.Time
+		t, _ := time.ParseInLocation("20060102150405", order.Time, time.Local)
+		temp.Time = t.Format("2006-01-02 15:04:05")
+		temp.Remark = order.Remark
+
+		var orderGoodss []modelDB.OrderGoods
+		db.Table("TB_ORDER_GOODS").Where(" ORDER_ID = ? ",order.Id).Scan(&orderGoodss)
+		for i, orderGoods := range orderGoodss {
+			if i != 0 {
+				temp.Details += "；"
+			}
+			temp.Details += "商品名：" + orderGoods.Name + "，价格：" + strconv.FormatFloat(orderGoods.Price, 'f', -1, 64) +
+				"元，数量：" + strconv.Itoa(orderGoods.Number) + "，商品总价：" + strconv.FormatFloat(orderGoods.Sum, 'f', -1, 64) + "元"
 		}
 
 		result.Order = append(result.Order, temp)
