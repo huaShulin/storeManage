@@ -105,6 +105,14 @@ func init() {
 
 	beego.GlobalControllerRouter["storeManage/controllers:OrderController"] = append(beego.GlobalControllerRouter["storeManage/controllers:OrderController"],
 		beego.ControllerComments{
+			Method: "OrderDeleteGoods",
+			Router: `/deleteGoods`,
+			AllowHTTPMethods: []string{"POST"},
+			MethodParams: param.Make(),
+			Params: nil})
+
+	beego.GlobalControllerRouter["storeManage/controllers:OrderController"] = append(beego.GlobalControllerRouter["storeManage/controllers:OrderController"],
+		beego.ControllerComments{
 			Method: "GetOrderSum",
 			Router: `/getSum`,
 			AllowHTTPMethods: []string{"GET"},
@@ -244,6 +252,14 @@ func init() {
 			Method: "GetHelloWorld",
 			Router: `/GetHelloWorld`,
 			AllowHTTPMethods: []string{"get"},
+			MethodParams: param.Make(),
+			Params: nil})
+
+	beego.GlobalControllerRouter["storeManage/controllers:UserController"] = append(beego.GlobalControllerRouter["storeManage/controllers:UserController"],
+		beego.ControllerComments{
+			Method: "CheckoutLogin",
+			Router: `/checkout`,
+			AllowHTTPMethods: []string{"GET"},
 			MethodParams: param.Make(),
 			Params: nil})
 

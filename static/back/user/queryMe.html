@@ -10,11 +10,11 @@
             pageSize:5,
             url:'/hyl/user/queryMe',
             columns:[[
-                {title:'姓名',field:'name',width:150,align:'center'},
-                {title:'职位',field:'role',width:300,align:'center'},
-                {title:'手机号',field:'phone',width:100,align:'center'},
-                {title:'状态',field:'status',width:100,align:'center'},
-                {title:'操作',field:'options',width:300,align:'center'
+                {title:'姓名',field:'name',width:250,align:'center'},
+                {title:'职位',field:'role',width:400,align:'center'},
+                {title:'手机号',field:'phone',width:300,align:'center'},
+                {title:'状态',field:'status',width:200,align:'center'},
+                {title:'操作',field:'options',width:400,align:'center'
                     ,formatter:function (value,row,index) {
                         return "<a class='option' data-options=\"plain:true,iconCls:'icon-photo_edit'\" onclick=\"openMeEdit('"+ row.id +"')\">修改</a>"
 

@@ -42,7 +42,7 @@ func GetRoles(info models.PageInfo) (models.RoleResult) {
 		temp.Number = number.Number
 
 		var names []modelDB.ResultName
-		err = db.Raw("SELECT M.NAME FROM TB_ROLE_MENU RM LEFT JOIN TB_MENU M ON RM.MENU_ID = M.ID WHERE RM.ROLE_ID = ? ", role.Id).Scan(&names).Error
+		err = db.Raw("SELECT M.NAME FROM TB_ROLE_MENU RM LEFT JOIN TB_MENU M ON RM.MENU_ID = M.ID WHERE RM.ROLE_ID = ? ORDER BY M.ID ", role.Id).Scan(&names).Error
 		if err != nil && err != gorm.ErrRecordNotFound {
 			//result.Success = false
 			//result.Message = "数据库异常"

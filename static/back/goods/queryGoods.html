@@ -10,21 +10,20 @@
             pageSize:10,
             url:'/hyl/goods/queryAll',
             columns:[[
-                {title:'商品名',field:'name',width:150,align:'center'},
+                {title:'商品名',field:'name',width:250,align:'center'},
                 {title:'价格',field:'price',width:100,align:'center'},
                 /*{title:'图片',field:'src',width:100,align:'center',
                     formatter:function(value){
                         var src ="/static/"+value;
                         return  '<img src="'+src+'" style="height:30px">';
                     }},*/
-                {title:'描述',field:'remark',width:130,align:'center'},
-                {title:'剩余数量',field:'number',width:70,align:'center'},
-                {title:'提示进货数量',field:'purchase',width:70,align:'center'},
-                {title:'类别',field:'type',width:100,align:'center'},
-                {title:'操作',field:'options',width:300,align:'center'
+                {title:'描述',field:'remark',width:430,align:'center'},
+                {title:'剩余数量',field:'number',width:170,align:'center'},
+                {title:'类别',field:'type',width:200,align:'center'},
+                {title:'操作',field:'options',width:400,align:'center'
                     ,formatter:function (value,row,index) {
-                        return "<a class='option' data-options=\"plain:true,iconCls:'icon-photo_edit'\" onclick=\"openGoodsEdit('"+ row.id +"')\">修改</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"+
-                                "<a class='option' data-options=\"plain:true,iconCls:'icon-photo_edit'\" onclick=\"goodsDelete('"+ row.id +"')\">删除</a>"
+                        return "<a class='option' data-options=\"plain:true,iconCls:'icon-package_go'\" onclick=\"openGoodsEdit('"+ row.id +"')\">修改</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"+
+                                "<a class='option' data-options=\"plain:true,iconCls:'icon-package_delete'\" onclick=\"goodsDelete('"+ row.id +"')\">删除</a>"
                     }
                 }
             ]],

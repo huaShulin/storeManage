@@ -49,6 +49,14 @@ func (u *UserController) Login() {
 	reply, user = services.Login(login)
 
 	if reply.Success {
+		if user.Status != 1 {
+			u.Ctx.Output.Status = 200
+			reply.Success = false
+			reply.Message = "该用户已离职"
+			u.Data["json"] = reply
+			u.ServeJSON()
+			return
+		}
 		u.SetSession("user", user)
 	}
 
@@ -90,7 +98,6 @@ func (u *UserController) MessageLogin() {
 	var user modelDB.User
 	reply, user = services.MessageLogin(login.Phone)
 
-
 	if reply.Success {
 		if user.Status != 1 {
 			u.Ctx.Output.Status = 200
@@ -106,6 +113,27 @@ func (u *UserController) MessageLogin() {
 	u.Ctx.Output.Status = 200
 	u.Data["json"] = reply
 	u.ServeJSON()
+}
+
+// @Title CheckoutLogin
+// @Description 退出登录
+// @Param body body models.Login true "登录结构体"
+// @Success 200 {object} models.Result "返回结果"
+// @Failure 400 {object} models.Result "返回结果"
+// @router /checkout [GET]
+func (u *UserController) CheckoutLogin() {
+	//var reply models.Result
+
+	u.DestroySession()
+
+
+	u.Redirect("/static/back/user/userLogin.html",302)
+
+	/*u.Ctx.Output.Status = 200
+	reply.Success = true
+	reply.Message = "退出成功"
+	u.Data["json"] = reply
+	u.ServeJSON()*/
 }
 
 // @router /getMsg [POST]
@@ -149,6 +177,14 @@ func (u *UserController) GetLogin() {
 	fmt.Println("GetLgin")
 
 	user := u.GetSession("user")
+
+	if user == nil {
+		u.Ctx.Output.Status = 200
+		u.Data["json"] = reply
+		u.ServeJSON()
+		return
+	}
+
 	use := user.(modelDB.User)
 
 	reply.Name = use.Name

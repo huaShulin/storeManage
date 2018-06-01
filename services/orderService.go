@@ -112,7 +112,7 @@ func GetMeOrder(info models.PageInfo, userId string) models.OrderResult {
 		*/
 	}
 
-	db.Table("TB_ORDER").Count(&result.Total)
+	db.Table("TB_ORDER").Where(" USER_ID = ? ", userId).Count(&result.Total)
 
 	return result
 }
@@ -184,7 +184,15 @@ func CreateOrder(userId string, orderGoodss map[string]int, remark string) (mode
 	for _, goods := range goodss {
 		//减去商品库存
 		goodsMap := make(map[string]interface{})
-		goodsMap["NUMBER"] = goods.Number - orderGoodss[goods.Id]
+		number := goods.Number - orderGoodss[goods.Id]
+		if number < 0 {
+			db.Rollback()
+			result.Success = false
+			result.Message = "商品数量不足"
+			return result
+		}
+		goodsMap["NUMBER"] = number
+
 		db.Table("TB_GOODS").Where(" ID = ? ", goods.Id).Update(goodsMap)
 
 		var tempOrderGoods modelDB.OrderGoods

@@ -5,18 +5,18 @@
             fit:true,
             fitColumns:false,
             pagination:true,
-            pageList:[2,3,5,10],
+            pageList:[2,3,5,10,15,20,30],
             pageNumber:1,
-            pageSize:5,
+            pageSize:10,
             url:'/hyl/type/queryAll',
             columns:[[
-                {title:'类名',field:'name',width:150,align:'center'},
-                {title:'父类名',field:'parent',width:100,align:'center'},
-                {title:'商品数',field:'number',width:70,align:'center'},
-                {title:'操作',field:'options',width:300,align:'center'
+                {title:'类名',field:'name',width:250,align:'center'},
+                {title:'父类名',field:'parent',width:200,align:'center'},
+                {title:'商品数',field:'number',width:170,align:'center'},
+                {title:'操作',field:'options',width:400,align:'center'
                     ,formatter:function (value,row,index) {
-                        return "<a class='option' data-options=\"plain:true,iconCls:'icon-photo_edit'\" onclick=\"openTypeEdit('"+ row.id +"')\">修改</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"+
-                                "<a class='option' data-options=\"plain:true,iconCls:'icon-photo_edit'\" onclick=\"typeDelete('"+ row.id +"')\">删除</a>"
+                        return "<a class='option' data-options=\"plain:true,iconCls:'icon-image_edit'\" onclick=\"openTypeEdit('"+ row.id +"')\">修改</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"+
+                                "<a class='option' data-options=\"plain:true,iconCls:'icon-image_delete'\" onclick=\"typeDelete('"+ row.id +"')\">删除</a>"
                     }
                 }
             ]],
@@ -53,7 +53,7 @@
         $("#openTypeSave").dialog({
             top:200,
             width:680,
-            title:"保存商品",
+            title:"保存分类",
             iconCls:'icon-photo_edit',
             href:'/static/back/type/saveType.html',
             buttons:[{
@@ -98,8 +98,8 @@
         $("#openTypeEdit").dialog({
             top:200,
             width:700,
-            title:"修改商品信息",
-            iconCls:'icon-man',
+            title:"修改分类信息",
+            iconCls:'icon-image_edit',
             href:'/static/back/type/editType.html',
             buttons:[{
                 text:'保存',
@@ -144,7 +144,7 @@
 
 <%--工具栏--%>
 <div id="typeTools">
-    <a class="easyui-linkbutton" onclick="openTypeSave();" data-options="iconCls:'icon-photo_add',plain:true">添加</a>
+    <a class="easyui-linkbutton" onclick="openTypeSave();" data-options="iconCls:'icon-image_add',plain:true">添加</a>
 </div>
 
 <%--用户保存对话框--%>

@@ -110,7 +110,7 @@ func GetUsers(info models.PageInfo) (models.UserResult) {
 			ids = append(ids, userRole.RoleId)
 		}
 		var roles []modelDB.RoleList
-		err = db.Table("TB_ROLE").Where(" ID IN (?) ", ids).Scan(&roles).Error
+		err = db.Table("TB_ROLE").Where(" ID IN (?) ", ids).Order("ID").Scan(&roles).Error
 		if err != nil && err != gorm.ErrRecordNotFound {
 			return result
 		}

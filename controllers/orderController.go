@@ -160,3 +160,27 @@ func (o *OrderController) OrderAddGoods() {
 	o.ServeJSON()
 }
 
+// @Title OrderAddGoods
+// @Description 订单删除商品
+// @Param body body models.OrderAddGoodsParam true "订单添加商品"
+// @Success 200 {object} []models.Result "返回结果"
+// @Failure 400 {object} []models.Result "返回结果"
+// @router /deleteGoods [POST]
+func (o *OrderController) OrderDeleteGoods() {
+	var reply models.Result
+
+	in := models.IdParam{}
+	o.ParseForm(&in)
+
+	orderGoodsSession := o.GetSession("orderGoodsList")
+	orderGoodsList := orderGoodsSession.(map[string]int)
+
+	delete(orderGoodsList,in.Id)
+
+	o.SetSession("orderGoodsList", orderGoodsList)
+
+	o.Ctx.Output.Status = 200
+	o.Data["json"] = reply
+	o.ServeJSON()
+}
+

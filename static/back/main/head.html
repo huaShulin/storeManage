@@ -4,7 +4,7 @@
          $.post('/hyl/user/getLogin',  function(data){
              let r=data.role;
              let n=data.name;
-             $("#msg").text(r+" "+n);
+             $("#msg").text(r+"   "+n);
          }, 'json');
     });
 </script>
@@ -15,5 +15,6 @@
     <h3>
         欢迎
         <span id="msg"></span>
+        <a href="/hyl/user/checkout">退出登录</a>
     </h3>
 </div>

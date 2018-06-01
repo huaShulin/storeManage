@@ -5,20 +5,20 @@
             fit:true,
             fitColumns:false,
             pagination:true,
-            pageList:[2,3,5,10],
+            pageList:[2,3,5,10,15,20,30],
             pageNumber:1,
-            pageSize:5,
+            pageSize:10,
             url:'/hyl/user/queryAll',
             columns:[[
-                {title:'姓名',field:'name',width:150,align:'center'},
-                {title:'职位',field:'role',width:300,align:'center'},
-                {title:'手机号',field:'phone',width:100,align:'center'},
-                {title:'状态',field:'status',width:100,align:'center'},
-                {title:'操作',field:'options',width:300,align:'center'
+                {title:'姓名',field:'name',width:250,align:'center'},
+                {title:'职位',field:'role',width:400,align:'center'},
+                {title:'手机号',field:'phone',width:300,align:'center'},
+                {title:'状态',field:'status',width:200,align:'center'},
+                {title:'操作',field:'options',width:400,align:'center'
                     ,formatter:function (value,row,index) {
                         return "<a class='option' data-options=\"plain:true,iconCls:'icon-photo'\" onclick=\"userStatus('"+ row.id +"')\">变更状态</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"+
-                                "<a class='option' data-options=\"plain:true,iconCls:'icon-photo_edit'\" onclick=\"openUserEdit('"+ row.id +"')\">修改</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"+
-                                "<a class='option' data-options=\"plain:true,iconCls:'icon-photo_edit'\" onclick=\"userDelete('"+ row.id +"')\">删除</a>"
+                                "<a class='option' data-options=\"plain:true,iconCls:'icon-user_edit'\" onclick=\"openUserEdit('"+ row.id +"')\">修改</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"+
+                                "<a class='option' data-options=\"plain:true,iconCls:'icon-user_delete'\" onclick=\"userDelete('"+ row.id +"')\">删除</a>"
                     }
                 }
             ]],
@@ -56,7 +56,7 @@
             top:200,
             width:680,
             title:"保存用户",
-            iconCls:'icon-photo_edit',
+            iconCls:'icon-user_add',
             href:'/static/back/user/saveUser.html',
             buttons:[{
                 text:'保存',
@@ -105,7 +105,7 @@
                     tab.panel('refresh');
                     $.messager.show({
                         title:'提示',
-                        msg:'商品删除成功...',
+                        msg:'员工删除成功...',
                     });
                     //刷新datagrid
                     $("#dg").datagrid('reload');//始终保持在当前页展示
@@ -189,7 +189,7 @@
 
 <%--工具栏--%>
 <div id="userTools">
-    <a class="easyui-linkbutton" onclick="openUserSave();" data-options="iconCls:'icon-photo_add',plain:true">添加</a>
+    <a class="easyui-linkbutton" onclick="openUserSave();" data-options="iconCls:'icon-user_add',plain:true">添加</a>
 </div>
 
 <%--用户保存对话框--%>

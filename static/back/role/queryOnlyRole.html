@@ -1,0 +1,26 @@
+<script type="text/javascript">
+
+    $(function () {
+        $("#roleOnyleDatagrid").datagrid({
+            fit:true,
+            fitColumns:false,
+            pagination:true,
+            pageList:[2,3,5,10,15,20,30],
+            pageNumber:1,
+            pageSize:10,
+            url:'/hyl/role/queryAll',
+            columns:[[
+                {title:'职位',field:'name',width:250,align:'center'},
+                {title:'权限',field:'menu',width:600,align:'center'},
+                {title:'人数',field:'number',width:100,align:'center'}
+            ]],
+            onLoadSuccess:function () {
+                $(".option").linkbutton();
+            },
+        });
+    });
+    
+</script>
+
+<!--datagrid-->
+<table id="roleOnyleDatagrid"></table>

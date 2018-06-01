@@ -1,0 +1,26 @@
+<script type="text/javascript">
+
+    $(function () {
+        $("#typeOnlyDatagrid").datagrid({
+            fit:true,
+            fitColumns:false,
+            pagination:true,
+            pageList:[2,3,5,10,15,20,30],
+            pageNumber:1,
+            pageSize:10,
+            url:'/hyl/type/queryAll',
+            columns:[[
+                {title:'类名',field:'name',width:250,align:'center'},
+                {title:'父类名',field:'parent',width:200,align:'center'},
+                {title:'商品数',field:'number',width:170,align:'center'}
+            ]],
+            onLoadSuccess:function () {
+                $(".option").linkbutton();
+            }
+        });
+    });
+
+</script>
+
+<!--datagrid-->
+<table id="typeOnlyDatagrid"></table>

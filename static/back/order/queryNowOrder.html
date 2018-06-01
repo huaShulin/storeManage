@@ -25,6 +25,11 @@
                         return "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" + row.price * row.orderNumber + "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
                     }
                 },
+                {title:'操作',field:'options',width:300,align:'center'
+                    ,formatter:function (value,row,index) {
+                        return "<a class='option' data-options=\"plain:true,iconCls:'icon-photo_edit'\" onclick=\"nowOrderDelete('"+ row.id +"')\">删除</a>"
+                    }
+                }
             ]],
             onLoadSuccess:function () {
                 $(".option").linkbutton();
@@ -32,98 +37,6 @@
             toolbar:'#nowOrderTools'
         });
     });
-
-    //add
-    function goodsSave() {
-        $('#goodsSaveForm').form('submit', {
-            url:'/hyl/goods/save',
-            onSubmit: function(user){
-                //return $('#userSaveForm').form('validate');
-                return true;
-            },
-            success:function(data){
-                var data = eval('(' + data + ')');
-                if (data.success){
-                    $('#openGoodsSave').dialog('close',true);
-                    //var tab = $tabs.tabs('getSelected');
-                    //tab.panel('refresh');
-                    $("#goodsDatagrid").datagrid('reload');
-                } else {
-                    alert(data.message)
-                }
-            }
-        });
-    }
-    //Open User Save
-    function openGoodsSave() {
-        $("#openGoodsSave").dialog({
-            top:200,
-            width:680,
-            title:"保存商品",
-            iconCls:'icon-photo_edit',
-            href:'/static/back/goods/saveType.html',
-            buttons:[{
-                text:'保存',
-                iconCls:'icon-save',
-                handler:goodsSave
-            },{
-                text:'关闭',
-                iconCls:'icon-cancel',
-                handler:function () {
-                    $("#openGoodsSave").dialog('close',true);
-                }
-            }]
-        });
-    }
-
-    function goodsInline(src) {
-        window.open('/hyl/goods/inline?src='+src);
-    }
-
-    //update
-    function goodsEdit() {
-        $('#goodsEditForm').form('submit', {
-            url:'/hyl/goods/edit',
-            onSubmit: function(user){
-                return $('#goodsEditForm').form('validate');
-            },
-            success:function(data){
-                var data = eval('(' + data + ')');
-                if (data.success){
-                    //var tab = $tabs.tabs('getSelected');
-                    //tab.panel('refresh');
-                    $("#goodsDatagrid").datagrid('reload');
-                    $('#openGoodsEdit').dialog('close',true);
-                } else {
-                    alert(data.message)
-                }
-            }
-        });
-    }
-    //Open Update dialog
-    function openGoodsEdit(id) {
-        $.post('/hyl/goods/saveEditId', {"id":id}, function(data){
-            alert(data.message);
-        }, 'json');
-        $("#openGoodsEdit").dialog({
-            top:200,
-            width:700,
-            title:"修改商品信息",
-            iconCls:'icon-man',
-            href:'/static/back/goods/editType.html',
-            buttons:[{
-                text:'保存',
-                iconCls:'icon-save',
-                handler:goodsEdit
-            },{
-                text:'关闭',
-                iconCls:'icon-cancel',
-                handler:function () {
-                    $("#openGoodsEdit").dialog('close',true);
-                }
-            }]
-        });
-    }
 
     //生成订单
     function createOrder() {
@@ -145,6 +58,27 @@
                 }
             });
         }, 'json');
+    }
+
+    function nowOrderDelete(id) {
+        console.log(id);
+        //友情提醒
+        $.messager.confirm('提示','确定要删除吗?',function(r){
+            if(r){
+                //发送ajax请求删除商品
+                $.post('/hyl/order/deleteGoods',{"id":id},function(){
+                    var tab = $tabs.tabs('getSelected');
+                    tab.panel('refresh');
+                    $.messager.show({
+                        title:'提示',
+                        msg:'订单商品删除成功...',
+                    });
+                    //刷新datagrid
+                    $("#dg").datagrid('reload');//始终保持在当前页展示
+                });
+            }
+
+        });
     }
 
     

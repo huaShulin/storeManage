@@ -17,7 +17,8 @@ import (
 func GetConn() (*gorm.DB, error) {
 	username := "root"
 	password := "root"
-	dburl := "@(39.106.96.217:3306)/STORE_MANAGE?charset=utf8&parseTime=True&loc=Local"
+	//dburl := "@(39.106.96.217:3306)/STORE_MANAGE?charset=utf8&parseTime=True&loc=Local"
+	dburl := "@(127.0.0.1:3306)/STORE_MANAGE?charset=utf8&parseTime=True&loc=Local"
 	str := username + ":" + password + dburl
 	db, err := gorm.Open("mysql", str)
 	if err != nil {
